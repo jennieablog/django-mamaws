@@ -52,8 +52,9 @@
     {% endif %}
     <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'home' %}">Shop</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'contact' %}">Contact</a></li>
         {% if user.is_authenticated %}
         <li>Welcome, {{ user.first_name }}. <a href="{% url 'account_logout' %}">LOGOUT</a></li>
         {% else %}
@@ -62,10 +63,21 @@
         {% endif %}
     </ul>
 
+    <hr>
+
     <main>
         {% block content %}
         {% endblock %}
     </main>
+
+    <hr>
+    <footer>
+        <ul>
+            <li><a href="{% url 'my_reservations' %}">My Reservations</a></li>
+        </ul>
+    </footer>
+    {% block scripts %}
+    {% endblock %}
 </body>
 
 </html>

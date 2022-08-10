@@ -52,9 +52,12 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'mamaws.apps.accounts',
     'mamaws.apps.pages',
+    'mamaws.apps.events',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -166,6 +169,7 @@ LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # Email Verification
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'snufkindood@gmail.com'
@@ -173,4 +177,17 @@ EMAIL_HOST_PASSWORD = 'kkkigqouqjcbtpxp'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Storage
+# https://pypi.org/project/django-cloudinary-storage/
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dxwabfwlo',
+    'API_KEY': '588198687459983',
+    'API_SECRET': 'X5AOKwV698k3NYOSD4FU93Z73ts'
+}
+
+MEDIA_URL = '/media/'  # or any prefix you choose
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 

@@ -20,6 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('mamaws.apps.pages.urls')),
+    path('', include('mamaws.apps.events.urls')),
 ]
 
 handler404 = 'mamaws.apps.pages.views.error404PageView'
