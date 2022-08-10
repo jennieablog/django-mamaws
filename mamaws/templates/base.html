@@ -44,12 +44,18 @@
 
 <body>
     <h1>Mamaw's Clown and Party Needs</h1>
+    {% if messages %} 
+    <h3>Messages:</h3>
+    <ul>
+        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+    </ul>
+    {% endif %}
     <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
         <li><a href="{% url 'contact' %}">Contact</a></li>
         {% if user.is_authenticated %}
-        <li>Welcome back, {{ user.first_name }}. <a href="{% url 'account_logout' %}">LOGOUT</a></li>
+        <li>Welcome, {{ user.first_name }}. <a href="{% url 'account_logout' %}">LOGOUT</a></li>
         {% else %}
         <li><a href="{% url 'account_signup' %}">SIGNUP</a></li>
         <li><a href="{% url 'account_login' %}">LOGIN</a></li>
