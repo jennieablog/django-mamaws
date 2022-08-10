@@ -21,6 +21,7 @@ def services(request):
 		if form.is_valid():
 			reservation = form.save(commit=False)
 			reservation.account = request.user
+			reservation.status = 'PENDING'
 			reservation.save()
 
 			keys = request.POST.keys()
@@ -59,7 +60,7 @@ def services(request):
 
 			reservation.updateTotalCost()
 			reservation.save()
-			return redirect('home')
+			return redirect('my_reservations')
 		else:
 			messages.error(request, _('There was an error:'+str(form.errors)))
 	

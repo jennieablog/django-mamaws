@@ -2,4 +2,11 @@
 
 {% block content %}
 <h2>My Reservations</h2>
+
+<ul>
+    {% for reservation in reservations %}
+    <li><a href="{% url 'reservation_details' pk=reservation.id %}">{{ reservation.party_name }} ({{reservation.status}})</a></li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

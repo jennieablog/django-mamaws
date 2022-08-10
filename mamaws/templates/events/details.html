@@ -2,4 +2,46 @@
 
 {% block content %}
 
+<h1>{{ reservation.party_name }} ({{reservation.status}})</h1>
+
+<h3>Summary</h3>
+<ul>
+    <li>{{ user.name }}</li>
+    <li>{{ user.email }}</li>
+    <li>Party Name: {{ reservation.party_name }}</li>
+    <li>Size: {{ reservation.party_size }}</li>
+    <li>Date: {{ reservation.party_date }}</span></li>
+    <li>Start time: {{ reservation.party_start_time }}</li>
+    <li>End time: {{ reservation.party_end_time }}</li>
+    <li>Mascots:
+        <ul>
+            {% for mascot in reservation.mascots.all %}
+            <li>{{ mascot.mascot.name }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>Services:
+        <ul>
+            {% for service in reservation.services.all %}
+            <li>{{ service.service.name }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>Equipments:
+        <ul>
+            {% for equipment in reservation.equipments.all %}
+            <li>{{ equipment.equipment.name }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>Performers:
+        <ul>
+            {% for performer in reservation.performers.all %}
+            <li>{{ performer.performer.name }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>
+
+
 {% endblock %}
