@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+
+<div class="container window vh-100">
+
+  <div>
+    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+    <p class="fs-4">We have sent an e-mail to you for verification. Click the link provided to finalize the signup process.</p>
+    <p>Check your spam folder if it's not in your inbox. If you do not receive it within a few minutes, please <a href="{% url 'contact' %}">contact us</a>.</p>
+  </div>
+
+</div>
+{% endblock %}
