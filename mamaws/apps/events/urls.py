@@ -7,4 +7,5 @@ urlpatterns = [
     path('services/', services, name='services'), #form
     path('my_reservations/', my_reservations, name='my_reservations'), #listing
     path('my_reservations/<int:pk>', reservation_details, name='reservation_details'), #show
+    path('my_reservations/<int:pk>/pay', payment, name='payment'), #show
 ]

@@ -59,6 +59,7 @@ class Reservation(models.Model):
 	status = models.CharField(max_length=15, blank=False, choices=RESERVATION_STATUS)
 
 	party_name = models.CharField(max_length=200)
+	party_address = models.CharField(max_length=200)
 	party_size = models.IntegerField(default=0, blank=False)
 	party_date = models.DateField(blank=False)
 	party_start_time = models.TimeField(blank=False)

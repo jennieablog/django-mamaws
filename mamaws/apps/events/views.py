@@ -87,3 +87,11 @@ def reservation_details(request, pk):
 		"reservation": reservation,
 	}
 	return render(request, 'events/details.html', context)
+
+@login_required
+def payment(request, pk):
+	reservation = get_object_or_404(Reservation, id=pk)
+	context = {
+		"reservation": reservation,
+	}
+	return render(request, 'events/payment.html', context)
