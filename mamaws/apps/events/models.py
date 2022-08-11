@@ -133,3 +133,47 @@ class EquipmentReservation(models.Model):
 
 	def __str__(self):
 		return self.reservation.party_name + ' - ' + self.equipment.name + ' Reservation'
+
+class Product(models.Model):
+	name = models.CharField(max_length=200)
+	description = models.TextField(blank=True, null=True)
+	picture = models.ImageField(upload_to='pictures/', null=True, blank=True)
+	unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+	inventory = models.IntegerField(default=0, blank=False)
+
+	def __str__(self):
+		return self.name
+
+class Purchase(models.Model):
+	account = models.ForeignKey(Account, on_delete=models.CASCADE)
+	created_at = models.DateTimeField(auto_now_add=True)
+	total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+	def __str__(self):
+		return self.account.first_name + ' ' + self.account.last_name + ' ' + str(self.created_at)
+
+	def updateTotalCost(self):
+		total = 0
+		
+		for product in self.products.all():
+			total += product.line_total()
+		
+		self.total_cost = total
+
+	def status(self):
+		if self.account.active_purchase_id == self.id:
+			return 'TO PAY'
+		else:
+			return 'PAID'
+
+class ProductPurchase(models.Model):
+	purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name="products")
+	product = models.ForeignKey(Product, on_delete=models.CASCADE)
+	quantity = models.IntegerField(default=0, blank=False)
+	unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+	def __str__(self):
+		return self.product.name + ' (' + str(self.quantity) + ' pc) - PO#' + str(self.purchase.id)
+	
+	def line_total(self):
+		return self.quantity * self.unit_price

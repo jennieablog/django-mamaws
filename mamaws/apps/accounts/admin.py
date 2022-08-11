@@ -12,7 +12,7 @@ class AccountAdmin(UserAdmin):
 			'fields': ('username', 'password')
 		}),
 		('Profile', {
-			'fields': ('email','first_name', 'last_name',)
+			'fields': ('email','first_name', 'last_name','active_purchase_id')
 		}),
 		('Activity Log', {
 			'fields': ('created_at', 'updated_at', 'last_login',),

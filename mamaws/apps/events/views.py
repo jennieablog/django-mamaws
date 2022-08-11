@@ -16,7 +16,6 @@ import json
 @login_required
 def services(request):
 	if request.method == "POST":
-		print(request.POST)
 		form = ReservationCreationForm(request.POST)
 		if form.is_valid():
 			reservation = form.save(commit=False)
@@ -95,3 +94,75 @@ def payment(request, pk):
 		"reservation": reservation,
 	}
 	return render(request, 'events/payment.html', context)
+
+@login_required
+def shop(request):
+	if request.method == "POST":
+		product_id = request.POST['product']
+		quantity = request.POST['quantity']
+		product = get_object_or_404(Product, id=product_id)
+		purchase = get_object_or_404(Purchase, id=request.user.active_purchase_id)
+		ProductPurchase.objects.create(
+			product=product,
+			purchase=purchase,
+			quantity=quantity,
+			unit_price=product.unit_price,
+		)
+
+		product.inventory = product.inventory - int(quantity)
+		product.save()
+
+		purchase.updateTotalCost()
+		purchase.save()
+
+		request.user.cart_size += 1
+		request.user.save()
+
+		messages.success(request, _('Product successfully added to your cart!'))
+		return redirect('shop')
+	else:
+		products = Product.objects.all()
+		context = {
+			"products": products,
+		}
+		return render(request, 'shop/shop.html', context)
+
+@login_required
+def cart(request):
+	purchase = get_object_or_404(Purchase, id=request.user.active_purchase_id)
+	products = ProductPurchase.objects.filter(purchase=purchase)
+	context = {
+		"products": products,
+		"order": purchase,
+	}
+
+	return render(request, 'shop/cart.html', context)
+
+@login_required
+def delete_purchase(request, pk):
+	product_purchase = get_object_or_404(ProductPurchase, id=pk)
+	purchase = product_purchase.purchase
+	if product_purchase.purchase.account == request.user:
+		product_purchase.delete()
+		purchase.updateTotalCost()
+		purchase.save()
+		request.user.cart_size -= 1
+		request.user.save()
+		messages.success(request, _('Product successfully removed from your cart!'))
+	return redirect('cart')
+
+@login_required
+def my_orders(request):
+	context = {
+		"orders": Purchase.objects.filter(account=request.user, total_cost__gt=0),
+	}
+	return render(request, 'shop/listing.html', context)
+
+@login_required
+def order_details(request, pk):
+	purchase = get_object_or_404(Purchase, id=pk)
+	context = {
+		"order": purchase,
+		"products": purchase.products.all(),
+	}
+	return render(request, 'shop/details.html', context)

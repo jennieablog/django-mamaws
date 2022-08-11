@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Cart</h2>
+
+<ul>
+    {% for product in products %}
+        <li>
+            <strong>{{ product.product.name }}</strong>
+            <div>Order Qty: {{ product.quantity }} pc</div>
+            <div>Unit Price: PHP {{ product.unit_price }} </div>
+            <div>Total: {{ product.line_total }} </div>
+            <div><button><a href="{% url 'delete_purchase' pk=product.id %}">Remove</a></button></div>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>TOTAL: PHP {{ order.total_cost }}</h3>
+
+{% if order.total_cost > 0 %}
+<div><button>Checkout</button></div>
+{% endif %}
+
+{% endblock %}

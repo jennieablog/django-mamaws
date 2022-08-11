@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Purchase ID: {{ order.id }} ({{ order.status }})</h1>
+
+<ul>
+    {% for product in products %}
+        <li>
+            <strong>{{ product.product.name }}</strong>
+            <div>Order Qty: {{ product.quantity }} pc</div>
+            <div>Unit Price: PHP {{ product.unit_price }} </div>
+            <div>Total: {{ product.line_total }} </div>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>TOTAL: PHP {{ order.total_cost }}</h3>
+
+{% if order.status == "TO PAY" %}
+<div><button>Checkout</button></div>
+{% endif %}
+
+{% endblock %}

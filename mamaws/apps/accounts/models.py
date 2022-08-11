@@ -6,7 +6,9 @@ class Account(AbstractUser):
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
-	# insert fields here
+	active_purchase_id = models.IntegerField(default=0, blank=False)
+	cart_size = models.IntegerField(default=0, blank=False)
+
 
 	def __str__(self):
 		return self.email

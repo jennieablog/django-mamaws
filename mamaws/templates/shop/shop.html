@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Shop</h2>
+
+<ul>
+    {% for product in products %}
+        <li>
+                <a href="">{{ product.name }} - PHP. {{ product.unit_price }}</a>
+                <div>Available qty: {{ product.inventory}} </div>
+                {% if product.inventory > 0 %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="number" name="product" value="{{ product.id }}" hidden>
+                    <input type="number" name="quantity" min="1" max="{{ product.inventory }}" value="1">
+                    <button type="submit">Add to cart</button>
+                </form>
+                {% else %}
+                Out of Stock!
+                {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

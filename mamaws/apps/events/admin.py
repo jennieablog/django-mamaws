@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import ReservationCreationForm
-from .models import Mascot, Service, Performer, Equipment, Reservation, MascotReservation, ServiceReservation, PerformerReservation, EquipmentReservation
+from .models import *
 
 class MascotReservationInLine(admin.TabularInline):
 	model = MascotReservation
@@ -30,3 +30,6 @@ admin.site.register(Service)
 admin.site.register(Performer)
 admin.site.register(Equipment)
 admin.site.register(Reservation, ReservationAdmin)
+admin.site.register(Product)
+admin.site.register(Purchase)
+admin.site.register(ProductPurchase)
