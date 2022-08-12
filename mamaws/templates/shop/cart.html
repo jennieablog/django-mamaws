@@ -1,24 +1,278 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>My Cart</h2>
 
-<ul>
-    {% for product in products %}
-        <li>
-            <strong>{{ product.product.name }}</strong>
-            <div>Order Qty: {{ product.quantity }} pc</div>
-            <div>Unit Price: PHP {{ product.unit_price }} </div>
-            <div>Total: {{ product.line_total }} </div>
-            <div><button><a href="{% url 'delete_purchase' pk=product.id %}">Remove</a></button></div>
-        </li>
-    {% endfor %}
-</ul>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Moul&family=Roboto+Flex:opsz@8..144&display=swap');
+    
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        color: inherit;
+        text-decoration: inherit;
+    }
+    body{
+        background: linear-gradient(90deg, #CFECEE 13.39%, #F5B9B9 53.57%, #C3C2FB 85.51%);
+        font-family: 'Roboto Flex', sans-serif;
+    }
+    
+    /* CSS STYLE FOR NAVBAR */
+    .header{
+        display: flex;
+        flex-direction: column;
+        /* width: 100%; */
+    }
+    .infoSection{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        font-weight: bolder;
+        font-family: 'Roboto Flex', sans-serif;
+    }
+    .navigation{
+        display: flex;
+        height: 7.813rem;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+        background: white;
+        padding-left: 10.5rem;
+        padding-right: 10.5rem;
+        font-weight: bolder;
+    }
+    .leftHeader{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .leftHeader a{
+        color: inherit;
+        text-decoration: inherit;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+    .logoHeader{
+        background: #ffffff;
+        border-radius: 100%;
+        height: 10rem;
+        width: 10rem;
+        padding: 1rem;
+        border: 2px solid black;
+    }
+    .rightHeader{
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+    .user-icon{
+        width: 2.5rem;
+    }
+    
+    
+    
+    
+    
+    
+    /* CSS STYLE FOR FOOTER */
+    .footer{
+        height: 20rem;
+        display: flex;
+        flex-direction:column;
+        background:  rgba(255, 255, 255, 0.7);
+        border-top: 2px solid #000000;
+        justify-content: center;
+    }
+    .footerHeaders{
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+    .copyright{
+        padding-left: 5rem;
+        padding-top: 1rem;
+        font-size: 0.8rem;
+    }
+    .footerContent{
+        display: flex;
+        padding-left: 14rem;
+        padding-right: 14rem;
+    }
+    .leftFooter{
+        display: flex;
+        width: 100%;
+        align-items: flex-start;
+    }
+    .leftFooter a{
+        color: inherit;
+        text-decoration: inherit;
+    }
+    .myAccount{
+        display: flex;
+        flex-direction:column;
+        width: 100%;
+    }
+    .sitemap{
+        display: flex;
+        flex-direction:column;
+        width: 100%;
+    }
+    .rightFooter{
+        display: flex;
+        width: 100%;
+        justify-content: end;
+        align-items: center;
+    }
+    .socials{
+        display: flex;
+        flex-direction:column;
+        align-items: center;
+    }
+    .logoFooter{
+        background: #FFFFFF;
+        border-radius: 100%;
+        height: 10rem;
+        width: 10rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* CONTENTS STYLE */
+    .shopWrapper{
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+        margin-bottom: 5rem;
+    }
+    .subWrapperShop{
+        display: flex;
+    }
+    .shopCategoryContainer{
+        display: flex;
+        flex-direction: column;
+        width: 17rem;
+        height: 23rem;
+        align-items: center;
+        background-color: white;
+        border-radius: 5%;
+        margin-right: 2.5rem;
+    }
+    .headerCategory{
+        display: flex;
+        font-size: 1.5em;
+        font-weight: bolder;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
 
-<h3>TOTAL: PHP {{ order.total_cost }}</h3>
+    .shopCategoriesContainer a{
+        color: inherit;
+        text-decoration: inherit;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    
+    .catalog{
+        width: 60rem;
+        height: 50rem;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+        justify-content: space-around;
+        overflow: auto;
+        border-radius: 0.625rem;
+        background: rgba(255, 255, 255, 0.35);
+        padding: 3rem 3.75rem;
+        gap: 3rem;
+    }
+    .catalog a{
+        color: inherit;
+        text-decoration: inherit;
+    }
+    .itemCard{
+        width: 14rem;
+        height: 20rem;
+        background: rgba(255,255,255,0.5);
+        box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+        border-radius: 0.313rem;
+        padding: 0.75rem 0.813rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .itemImage{
+        display: flex;
+        height: 10rem;
+        width: 12rem;
+        background: #D9D9D9;
+        align-self: center;
+        margin-bottom: 2rem;
+    }
 
-{% if order.total_cost > 0 %}
-<div><button>Checkout</button></div>
-{% endif %}
+    table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+</style>
+
+<div class="shopWrapper">
+
+    <div class="subWrapperShop">
+        <div class="shopCategoryContainer">
+            <span class="headerCategory">INVOICE REF#{{ order.id }}</span>
+            <div class="shopCategoriesContainer">
+                <p><strong>Creation Date: </strong><br>{{ order.created_at }}</p><br>
+
+                <p><strong>Payment Date: </strong><br>{% if order.status == 'TO PAY' %}-{% else %}{{ order.paid_at }}{% endif %}</p><br>
+
+                <p><strong>Status: </strong><br>{{ order.status }}</p><br>
+                
+                <hr><br>
+
+                <p style="text-align: right; font-size: 1.5rem;"><strong>Total: </strong> PHP {{ order.total_cost }}</p>
+
+                <button style="margin: 10px 0px; width: 100%; font-size: 1.5rem;"><a href="">PAY NOW</a></button>
+            </div>
+        </div>
+        <div class="catalog" >
+            <span class="headerCategory">PARTICULARS</span>
+            <table width="100%">
+                <thead style="font-size: 1rem;">
+                    <th style="width: 5%; text-align: left;">#</th>
+                    <th style="width: 20%; text-align: left;">ITEM</th>
+                    <th style="width: 20%; text-align: right;">UNIT PRICE</th>
+                    <th style="width: 20%; text-align: right;">QTY</th>
+                    <th style="width: 25%; text-align: right;">TOTAL</th>
+                    <th style="width: 10%; text-align: right;"></th>
+                    
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.product.name }}</td>
+                        <td style="text-align: right;">{{ product.unit_price }}</td>
+                        <td style="text-align: right;">{{ product.quantity }} pcs</td>
+                        <td style="text-align: right;">{{ product.line_total }}</td>
+                        <td style="text-align: right;"><button><a href="{% url 'delete_purchase' pk=product.id %}">Remove</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr style="font-size: 1.5rem;">
+                        <td colspan="3" style="text-align: right;"><strong>TOTAL:</strong></td>
+                        <td style="text-align: right;">{{ order.total_quantity }} pcs</td>
+                        <td style="text-align: right;">PHP {{ order.total_cost }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

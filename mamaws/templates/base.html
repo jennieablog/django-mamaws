@@ -52,7 +52,7 @@
     {% endif %}
     <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
         <li><a href="{% url 'services' %}">Services</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
         {% if user.is_authenticated %}
@@ -73,7 +73,7 @@
             <div class='leftHeader'>
                 <img class='logoHeader' src='https://i.ibb.co/k6psPpp/logo.png' alt='logo'/>
                 <a href="{% url 'home' %}">HOME</a>
-                <a href="{% url 'shop' %}">SHOP</a>
+                <a href="{% url 'shop' category='all' %}">SHOP</a>
                 <a href="{% url 'services' %}">SERVICES</a>
                 <a href="{% url 'about' %}">ABOUT</a>
             </div>
@@ -113,7 +113,7 @@
                         All of our pages:
                         <ul>
                             <li><a href="{% url 'home' %}">Home</a></li>
-                            <li><a href="{% url 'shop' %}">Shop</a></li>
+                            <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
                             <li><a href="{% url 'services' %}">Services</a></li>
                             <li><a href="{% url 'about' %}">About</a></li>
                         </ul>

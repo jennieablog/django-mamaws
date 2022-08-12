@@ -96,7 +96,7 @@ def payment(request, pk):
 	return render(request, 'events/payment.html', context)
 
 @login_required
-def shop(request):
+def shop(request, category):
 	if request.method == "POST":
 		product_id = request.POST['product']
 		quantity = request.POST['quantity']
@@ -119,11 +119,15 @@ def shop(request):
 		request.user.save()
 
 		messages.success(request, _('Product successfully added to your cart!'))
-		return redirect('shop')
+		return redirect('shop', category=category)
 	else:
 		products = Product.objects.all()
+		if category != 'all':
+			products = Product.objects.filter(category=category)
+
 		context = {
 			"products": products,
+			"category": category,
 		}
 		return render(request, 'shop/shop.html', context)
 
@@ -143,6 +147,9 @@ def delete_purchase(request, pk):
 	product_purchase = get_object_or_404(ProductPurchase, id=pk)
 	purchase = product_purchase.purchase
 	if product_purchase.purchase.account == request.user:
+		product = product_purchase.product
+		product.inventory = product.inventory + product_purchase.quantity
+		product.save()
 		product_purchase.delete()
 		purchase.updateTotalCost()
 		purchase.save()
@@ -161,8 +168,10 @@ def my_orders(request):
 @login_required
 def order_details(request, pk):
 	purchase = get_object_or_404(Purchase, id=pk)
-	context = {
-		"order": purchase,
-		"products": purchase.products.all(),
-	}
-	return render(request, 'shop/details.html', context)
+	if purchase.account == request.user:
+		context = {
+			"order": purchase,
+			"products": purchase.products.all(),
+		}
+		return render(request, 'shop/details.html', context)
+	return render(request, 'pages/404.html')

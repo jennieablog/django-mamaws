@@ -135,11 +135,23 @@ class EquipmentReservation(models.Model):
 		return self.reservation.party_name + ' - ' + self.equipment.name + ' Reservation'
 
 class Product(models.Model):
+	CATEGORY = (
+		('ballo', 'Balloons'),
+		('banne', 'Banners'),
+		('gRBox', 'Gender Reveal Box'),
+		('gWrap', 'Gift Wrapper'),
+		('tACha', 'Table and Chairs'),
+		('dCurt', 'Decorative Curtains'),
+		('cTopp', 'Cake Toppers'),
+	)
+
 	name = models.CharField(max_length=200)
 	description = models.TextField(blank=True, null=True)
 	picture = models.ImageField(upload_to='pictures/', null=True, blank=True)
 	unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 	inventory = models.IntegerField(default=0, blank=False)
+
+	category = models.CharField(max_length=5, blank=False, choices=CATEGORY)
 
 	def __str__(self):
 		return self.name
@@ -159,6 +171,14 @@ class Purchase(models.Model):
 			total += product.line_total()
 		
 		self.total_cost = total
+	
+	def total_quantity(self):
+		total = 0
+		
+		for product in self.products.all():
+			total += product.quantity
+		
+		return total
 
 	def status(self):
 		if self.account.active_purchase_id == self.id:
