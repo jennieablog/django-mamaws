@@ -157,9 +157,16 @@ class Product(models.Model):
 		return self.name
 
 class Purchase(models.Model):
+	PURCHASE_STATUS = (
+		('TO PAY', 'TO PAY'),
+		('PAID', 'PAID'),
+	)
+
 	account = models.ForeignKey(Account, on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+	status = models.CharField(max_length=15, blank=False, default='TO PAY')
 
 	def __str__(self):
 		return self.account.first_name + ' ' + self.account.last_name + ' ' + str(self.created_at)
@@ -179,12 +186,6 @@ class Purchase(models.Model):
 			total += product.quantity
 		
 		return total
-
-	def status(self):
-		if self.account.active_purchase_id == self.id:
-			return 'TO PAY'
-		else:
-			return 'PAID'
 
 class ProductPurchase(models.Model):
 	purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name="products")
