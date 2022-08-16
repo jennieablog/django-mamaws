@@ -29,6 +29,11 @@ class ReservationAdmin(admin.ModelAdmin):
 		'created_at',
 		'account',
 		'status',
+		'total_cost'
+	]
+
+	list_filter = [
+		'status',
 	]
 
 class ProductPurchaseInLine(admin.TabularInline):
@@ -47,11 +52,51 @@ class PurchaseAdmin(admin.ModelAdmin):
 		'status',
 	]
 
+	list_filter = [
+		'status',
+	]
+
+class MascotAdmin(admin.ModelAdmin):
+	list_display = [
+		'name',
+		'description',
+		'price',
+	]
+
+class ServiceAdmin(admin.ModelAdmin):
+	list_display = [
+		'name',
+		'description',
+		'price',
+	]
+
+class EquipmentAdmin(admin.ModelAdmin):
+	list_display = [
+		'name',
+		'description',
+		'price',
+	]
+
+class PerformerAdmin(admin.ModelAdmin):
+	list_display = [
+		'name',
+		'description',
+		'price',
+	]
+
+class ProductAdmin(admin.ModelAdmin):
+	list_display = [
+		'name',
+		'description',
+		'inventory',
+		'unit_price',
+	]
+
 # Register your models here.
-admin.site.register(Mascot)
-admin.site.register(Service)
-admin.site.register(Performer)
-admin.site.register(Equipment)
+admin.site.register(Mascot, MascotAdmin)
+admin.site.register(Service, ServiceAdmin)
+admin.site.register(Performer, PerformerAdmin)
+admin.site.register(Equipment, EquipmentAdmin)
 admin.site.register(Reservation, ReservationAdmin)
-admin.site.register(Product)
+admin.site.register(Product, ProductAdmin)
 admin.site.register(Purchase, PurchaseAdmin)

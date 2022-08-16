@@ -44,12 +44,7 @@
 
 <body>
     <!-- <h1>Mamaw's Clown and Party Needs</h1> -->
-    <!-- {% if messages %}
-    <h3>Messages:</h3>
-    <ul>
-        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-    </ul>
-    {% endif %}
+    <!-- 
     <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
@@ -92,6 +87,13 @@
     </div>
 
     <main>
+        {% if messages %}
+        <div class="notifMessage">
+            <ul style="list-style: none;">
+                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            </ul>
+        </div>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>

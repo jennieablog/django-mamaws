@@ -8,11 +8,26 @@
     box-sizing: border-box;
     color: inherit;
     text-decoration: inherit;
+    --scrollbarBG: #CFD8DC;
+    --thumbBG: #fcbffc;
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
 
 body{
     background: linear-gradient(90deg, #CFECEE 13.39%, #F5B9B9 53.57%, #C3C2FB 85.51%);
     font-family: 'Roboto Flex', sans-serif;
+}
+*::-webkit-scrollbar {
+  width: 20px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG) ;
+  border-radius: 10px;
+  border: 3px solid var(--scrollbarBG);
 }
 
 /* CSS STYLE FOR NAVBAR */
@@ -127,6 +142,13 @@ body{
     width: 10rem;
     padding: 1rem;
     margin-bottom: 1rem;
+}
+.notifMessage{
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+    background-color: rgb(149, 255, 237);
 }
 
 
