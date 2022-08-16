@@ -1,165 +1,453 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Make a reservation.</h2>
 
-<br>
+<style>
+.servicesContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+}
 
-<form method="post">
-    {% csrf_token %}
-    <section>
-        <h3>Step 1: Party Information</h3>
+/* HEADER SYLES */
+.servicesHeaders{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-left: 15rem;
+    padding-right: 15rem;
+    padding-bottom: 10rem;
+}
+.mainHeader{
+    font-size: 5rem;
+    padding-bottom: 5rem;
+}
+.subHeader{
+    font-size: 1.5rem;
+    width: 65rem;
+}
 
-        <div>
-            <label for="id_party_name" required>Party name*:</label>
-            <input onchange="updateSummary(this);" type="text" id="id_party_name" name="party_name">
-            <div class="invalid-feedback">
-                {% for error in form.party_name.errors %}{{ error }}&nbsp;{% endfor %}
-            </div>
-        </div>
+/* STEP 1 CARD STYLE */
+.content1services{
+    display: flex;
+    padding-bottom: 10rem;
+}
+.servicesCard1{
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    width: 80rem;
+    padding-top: 2.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 6rem;
+}
+.step1{
+    display: flex;
+    font-size: 2em;
+    font-weight: 900;
+    color: #5b5aaa;
+    padding-bottom: 2rem;
+}
+.step1Content{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.step1Content input{
+    display: flex;
+    border-style: none;
+    border-radius: 5px;
+    height: 2rem;
+    width: 25rem;
+    font-size: 1.2em;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.step1Content label{
+    display: flex;
+    font-size: 1.5rem;
+}
 
-        <br>
+/* SERVICES STYLES */
+.content2services{
+    display: flex;
+    padding-bottom: 10rem;
+}
+.servicesCard2{
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    width: 80rem;
+    padding-top: 2.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 6rem;
+}
+.step2{
+    font-size: 2em;
+    font-weight: 900;
+    padding-bottom: 2rem;
+    color: #5b5aaa;
+}
+.servicesHeaderContainer{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+}
+.servicesHeader{
+    font-size: large;
+    font-weight: bold;
+}
+.itemCatalog{
+    /* width: 60rem; */
+    height: 26rem;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-around;
+    overflow: auto;
+    border-radius: 0.625rem;
+    background: rgba(255, 255, 255, 0.35);
+    padding: 3rem 3.75rem;
+    gap: 5rem;
+    margin-bottom: 5rem;
+}
+.itemCard{
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    height: 18rem;
+    background: rgba(255,255,255,0.5);
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 0.313rem;
+    padding: 0.75rem 0.813rem;
+}
+.itemImage{
+    display: flex;
+    height: 10rem;
+    width: 10rem;
+    background: #D9D9D9;
+    align-self: center;
+    margin-bottom: 1rem;    
+}
+.itemImage img{
+    height: 10rem;
+    width: 10rem; 
+}
+.itemDetails{
+    display: flex;
+    flex-direction: column;
+}
+.itemDetails div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+/* PERFORMER STYLES */
+.performerCatalog{
+    /* width: 60rem; */
+    height: 16rem;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-around;
+    overflow: auto;
+    border-radius: 0.625rem;
+    background: rgb(199, 199, 199);
+    padding: 3rem 3.75rem;
+    gap: 5rem;
+    margin-bottom: 5rem;
+}
+.performerCard{
+    display: flex;
+    /* flex-direction: column; */
+    width: 24rem;
+    height: 10rem;
+    background: rgb(255, 255, 255);
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 0.313rem;
+    justify-content: space-around;
+}
+.performerImage{
+    display: flex;
+    width: 7rem;
+    height: 7rem;
+    background: #D9D9D9;
+    align-self: center;
+}
+.performerImage img{
+    height: 7rem;
+    width: 7rem; 
+}
+.performerDetails{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 12rem;
+}
+.performerDetails div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.performerName{
+    font-size: 1.2rem;
+}
 
-        <div>
-            <label for="id_party_size" required>Party size*:</label>
-            <input onchange="updateSummary(this);" type="number" id="id_party_size" name="party_size" min="1" max="100">
-            <div class="invalid-feedback">
-                {% for error in form.party_size.errors %}{{ error }}&nbsp;{% endfor %}
-            </div>
-        </div>
+/* STEP 3 CARD STYLE */
+.content3services{
+    display: flex;
+    padding-bottom: 10rem;
+}
+.servicesCard3{
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    width: 80rem;
+    padding-top: 2.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 6rem;
+}
+.step3{
+    display: flex;
+    font-size: 2em;
+    font-weight: 900;
+    color: #5b5aaa;
+    padding-bottom: 2rem;
+}
+</style>
 
-        <br>
 
-        <div>
-            <label for="id_party_date" required>Party date*:</label>
-            <input onchange="updateSummary(this);" type="date" id="id_party_date" name="party_date">
-            <div class="invalid-feedback">
-                {% for error in form.party_date.errors %}{{ error }}&nbsp;{% endfor %}
-            </div>
-        </div>
-
-        <br>
-
-        <div>
-            <label for="id_party_start_time" required>Start time*:</label>
-            <input onchange="updateSummary(this);" type="time" id="id_party_start_time" name="party_start_time">
-            <div class="invalid-feedback">
-                {% for error in form.party_start_time.errors %}{{ error }}&nbsp;{% endfor %}
-            </div>
-        </div>
-
-        <br>
-
-        <div>
-            <label for="id_party_end_time" required>End time*:</label>
-            <input onchange="updateSummary(this);" type="time" id="id_party_end_time" name="party_end_time">
-            <div class="invalid-feedback">
-                {% for error in form.party_end_time.errors %}{{ error }}&nbsp;{% endfor %}
-            </div>
-        </div>
-    </section>
-
-    <br><br>
-
-    <section>
-        <h3>Step 2: Party Features</h3>
-
-        <h4>Mascots</h4>
-        {% for mascot in mascots %}
-        <input onchange="updateListSummary(this);" class="mascot" type="checkbox" id="mascot{{forloop.counter}}" name="mascot{{forloop.counter}}" value="{{ mascot.id }}" data-name="{{ mascot.name }}">
-        <label for="mascot{{forloop.counter}}">
-            <strong>{{ mascot.name }}:</strong> {{ mascot.description }} {% if mascot.picture %}<a href="{{ mascot.picture.url }}" target="_blank">See picture.</a>{% endif %}
-        </label><br>
-        {% endfor %}
-
-        <br>
-
-        <h4>Services</h4>
-        {% for service in services %}
-        <input onchange="updateListSummary(this);" class="service" type="checkbox" id="service{{forloop.counter}}" name="service{{forloop.counter}}" value="{{ service.id }}" data-name="{{ service.name }}">
-        <label for="service{{forloop.counter}}">
-            <strong>{{ service.name }}:</strong> {{ service.description }} {% if service.picture %}<a href="{{ service.picture.url }}" target="_blank">See picture.</a>{% endif %}
-        </label><br>
-        {% endfor %}
-
-        <br>
+    <form method="post">
+        {% csrf_token %}
         
-        <h4>Equipments</h4>
-        {% for equipment in equipments %}
-        <input onchange="updateListSummary(this);" class="equipment" type="checkbox" id="equipment{{forloop.counter}}" name="equipment{{forloop.counter}}" value="{{ equipment.id }}" data-name="{{ equipment.name }}">
-        <label for="equipment{{forloop.counter}}">
-            <strong>{{ equipment.name }}:</strong> {{ equipment.description }} {% if equipment.picture %}<a href="{{ equipment.picture.url }}" target="_blank">See picture.</a>{% endif %}
-        </label><br>
-        {% endfor %}
-
-        <br>
-
-        <h4>Performers</h4>
-        {% for performer in performers %}
-        <input onchange="updateListSummary(this);" class="performer" type="checkbox" id="performer{{forloop.counter}}" name="performer{{forloop.counter}}" value="{{ performer.id }}" data-name="{{ performer.name }}">
-        <label for="performer{{forloop.counter}}">
-            <strong>{{ performer.name }}:</strong> {{ performer.description }} {% if performer.picture %}<a href="{{ performer.picture.url }}" target="_blank">See picture.</a>{% endif %}
-        </label><br>
-        {% endfor %}
-
-        <br>
-    </section>
-
-    <section>
-        <h3>Step 3: Review and Book</h3>
-
-        <div>
-            <label for="id_phone_number" required>Phone number*:</label>
-            <input type="text" id="id_phone_number" name="phone_number">
-            <div class="invalid-feedback">
-                {% for error in form.phone_number.errors %}{{ error }}&nbsp;{% endfor %}
+        <div class="servicesContainer">
+            <div class="servicesHeaders">
+                <span class="mainHeader">BOOK YOUR PARTY NOW</span>
+                <span class="subHeader">Book a fun and exciting party with Mamaw’s Clown and Party Needs and let the most energetic and spunky children’s birthday entertainers. Make your birthday or special event blast!</span>
             </div>
-        </div>
 
-        <br>
 
-        <div>
-            <label for="id_notes" required>Notes*:</label><br>
-            <textarea id="id_notes" name="notes" rows="4" cols="50"></textarea>
-            <div class="invalid-feedback">
-                {% for error in form.notes.errors %}{{ error }}&nbsp;{% endfor %}
+            <div class="content1services">
+                <div class="servicesCard1">
+                    <div class="step1">STEP 1: Party Information</div>
+                    <div class="step1Content">
+                        <div>
+                            <label for="id_party_name" required>Party name*:</label>
+                            <input onchange="updateSummary(this);" type="text" id="id_party_name" name="party_name">
+                            <div class="invalid-feedback">
+                                {% for error in form.party_name.errors %}{{ error }}&nbsp;{% endfor %}
+                            </div>
+
+                            <label for="id_party_size" required>Party size*:</label>
+                            <input onchange="updateSummary(this);" type="number" id="id_party_size" name="party_size" min="1" max="100">
+                            <div class="invalid-feedback">
+                                {% for error in form.party_size.errors %}{{ error }}&nbsp;{% endfor %}
+                            </div>
+                            
+                            <label for="id_party_date" required>Party date*:</label>
+                            <input onchange="updateSummary(this);" type="date" id="id_party_date" name="party_date">
+                            <div class="invalid-feedback">
+                                {% for error in form.party_date.errors %}{{ error }}&nbsp;{% endfor %}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label for="id_party_start_time" required>Start time*:</label>
+                            <input onchange="updateSummary(this);" type="time" id="id_party_start_time" name="party_start_time">
+                            <div class="invalid-feedback">
+                                {% for error in form.party_start_time.errors %}{{ error }}&nbsp;{% endfor %}
+                            </div>
+
+                            <label for="id_party_end_time" required>End time*:</label>
+                            <input onchange="updateSummary(this);" type="time" id="id_party_end_time" name="party_end_time">
+                            <div class="invalid-feedback">
+                                {% for error in form.party_end_time.errors %}{{ error }}&nbsp;{% endfor %}
+                            </div>    
+
+                            <label>Party Location*</label>
+                            <input type="text"/>
+                        </div>
+                    </div>
+                </div>
             </div>
+    
+            <!-- <br><br> -->
+    
+            <div class="content2services">
+                <div class="servicesCard2">
+                    <div class="step2">STEP 2: Party Features</div>
+                    
+                    <div class="mascotContainer">
+                        <div class="servicesHeaderContainer">
+                            <span class="servicesHeader">MASCOTS</span>
+                            <span>Choose a mascot</span>
+                        </div>
+                        <div class="itemCatalog">
+                            {% for mascot in mascots %}
+                            <div class="itemCard">
+                                {% if mascot.picture %}
+                                <div class="itemImage"><img src="{{ mascot.picture.url }}" alt="{{ mascot.picture.url }}"></div>
+                                {% endif %}
+                                <div class="itemDetails">
+                                    <p>{{ mascot.name }}</p>
+                                    <p> {{ mascot.description }}</p>
+                                    <div>
+                                        <p>{{ mascot.price }}</p>
+                                        <input onchange="updateListSummary(this);" class="mascot" type="checkbox" id="mascot{{forloop.counter}}" name="mascot{{forloop.counter}}" value="{{ mascot.id }}" data-name="{{ mascot.name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+    
+                    <div class="subServicesContainer">
+                        <div class="servicesHeaderContainer">
+                            <span class="servicesHeader">SERVICES</span>
+                            <span>Choose a service</span>
+                        </div>
+                        
+    
+                        <div class="itemCatalog">
+                            {% for service in services %}
+                            <div class="itemCard">
+                                {% if service.picture %}<div class="itemImage"><img src="{{ service.picture.url }}" alt="{{ service.picture.url }}"></div>{% endif %}
+                                <div class="itemDetails">
+                                    <p>{{ service.name }}</p>
+                                    <p> {{ service.description }}</p>
+                                    <div>
+                                        <p>{{ service.price }}</p>
+                                        <input onchange="updateListSummary(this);" class="service" type="checkbox" id="service{{forloop.counter}}" name="service{{forloop.counter}}" value="{{ service.id }}" data-name="{{ service.name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+    
+                    <div class="equipmentsContainer">
+                        <div class="servicesHeaderContainer">
+                            <span class="servicesHeader">EQUIPMENTS</span>
+                            <span>Choose party equipments</span>
+                        </div>
+                        
+    
+                        <div class="itemCatalog">
+                            {% for equipment in equipments %}
+                                <div class="itemCard">
+                                    {% if equipment.picture %}
+                                    <div class="itemImage"><img src="{{ equipment.picture.url }}"></div>
+                                    {% endif %}
+                                    <div class="itemDetails">
+                                        <p>{{ equipment.name }}</p>
+                                        <p> {{ equipment.description }}</p>
+                                        <div>
+                                            <p>{{ equipment.price }}</p>
+                                            <input onchange="updateListSummary(this);" class="equipment" type="checkbox" id="equipment{{forloop.counter}}" name="equipment{{forloop.counter}}" value="{{ equipment.id }}" data-name="{{ equipment.name }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+    
+                    <div class="performerContainer">
+                        <div class="servicesHeaderContainer">
+                            <span class="servicesHeader">PERFORMERS</span>
+                            <span>Rent a performer on your party!</span>
+                        </div>
+                    
+                        <div class="performerCatalog">
+                            {% for performer in performers %}
+                            <div class="performerCard">
+                                <input onchange="updateListSummary(this);" class="performer" type="checkbox" id="performer{{forloop.counter}}" name="performer{{forloop.counter}}" value="{{ performer.id }}" data-name="{{ performer.name }}">
+                                {% if performer.picture %}
+                                <div class="performerImage"><img src="{{ performer.picture.url }}"></div>
+                                {% endif %}
+                                <div class="performerDetails">
+                                    <span class="performerName">{{ performer.name }}</span>
+                                    <div>
+                                        <p><a href="#">click for more details</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <section>
+                <h3>Step 3: Review and Book</h3>
+    
+                <div>
+                    <label for="id_phone_number" required>Phone number*:</label>
+                    <input type="text" id="id_phone_number" name="phone_number">
+                    <div class="invalid-feedback">
+                        {% for error in form.phone_number.errors %}{{ error }}&nbsp;{% endfor %}
+                    </div>
+                </div>
+    
+                <br>
+    
+                <div>
+                    <label for="id_notes" required>Notes*:</label><br>
+                    <textarea id="id_notes" name="notes" rows="4" cols="50"></textarea>
+                    <div class="invalid-feedback">
+                        {% for error in form.notes.errors %}{{ error }}&nbsp;{% endfor %}
+                    </div>
+                </div>
+    
+                <br>
+                
+            </section>
+    
+            <section>
+                <h3>Summary</h3>
+                <ul>
+                    <li>{{ user.name }}</li>
+                    <li>{{ user.email }}</li>
+                    <li>Party Name: <span id="summary_party_name"></span></li>
+                    <li>Size: <span id="summary_party_size"></span></li>
+                    <li>Date: <span id="summary_party_date"></span></li>
+                    <li>Start time: <span id="summary_party_start_time"></span></li>
+                    <li>End time: <span id="summary_party_end_time"></span></li>
+                    <li>Mascots:
+                        <ul id="summary_mascot">
+                        </ul>
+                    </li>
+                    <li>Services:
+                        <ul id="summary_service">
+                        </ul>
+                    </li>
+                    <li>Equipments:
+                        <ul id="summary_equipment">
+                        </ul>
+                    </li>
+                    <li>Performers:
+                        <ul id="summary_performer">
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <button type="submit">Submit Reservation</button>
         </div>
-
-        <br>
         
-    </section>
 
-    <section>
-        <h3>Summary</h3>
-        <ul>
-            <li>{{ user.name }}</li>
-            <li>{{ user.email }}</li>
-            <li>Party Name: <span id="summary_party_name"></span></li>
-            <li>Size: <span id="summary_party_size"></span></li>
-            <li>Date: <span id="summary_party_date"></span></li>
-            <li>Start time: <span id="summary_party_start_time"></span></li>
-            <li>End time: <span id="summary_party_end_time"></span></li>
-            <li>Mascots:
-                <ul id="summary_mascot">
-                </ul>
-            </li>
-            <li>Services:
-                <ul id="summary_service">
-                </ul>
-            </li>
-            <li>Equipments:
-                <ul id="summary_equipment">
-                </ul>
-            </li>
-            <li>Performers:
-                <ul id="summary_performer">
-                </ul>
-            </li>
-        </ul>
-    </section>
-    <button type="submit">Submit Reservation</button>
-</form>
+
+    </form>
+
+
 {% endblock %}
 
 {% block scripts %}

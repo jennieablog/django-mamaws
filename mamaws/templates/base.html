@@ -43,16 +43,11 @@
 </head>
 
 <body>
-    <h1>Mamaw's Clown and Party Needs</h1>
-    {% if messages %} 
-    <h3>Messages:</h3>
-    <ul>
-        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-    </ul>
-    {% endif %}
+    <!-- <h1>Mamaw's Clown and Party Needs</h1> -->
+    <!-- 
     <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
         <li><a href="{% url 'services' %}">Services</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
         {% if user.is_authenticated %}
@@ -61,22 +56,81 @@
         <li><a href="{% url 'account_signup' %}">SIGNUP</a></li>
         <li><a href="{% url 'account_login' %}">LOGIN</a></li>
         {% endif %}
-        <li><a href="{% url 'cart' %}">CART ({{ request.user.cart_size }})</a></li>
-    </ul>
+    </ul> -->
+    <div class="header">
+        <div class="infoSection">
+            <div>0917-128-5250</div>
+            <div>facebook.com/MamawsClown</div>
+            <div>Tondo, Manila</div>
+            <div>MAMAW'S CLOWN AND PARTY NEEDS</div>
+        </div>
+        <div class="navigation">
+            <div class='leftHeader'>
+                <img class='logoHeader' src='https://i.ibb.co/k6psPpp/logo.png' alt='logo'/>
+                <a href="{% url 'home' %}">HOME</a>
+                <a href="{% url 'shop' category='all' %}">SHOP</a>
+                <a href="{% url 'services' %}">SERVICES</a>
+                <a href="{% url 'about' %}">ABOUT</a>
+            </div>
 
-    <hr>
+            <div class='rightHeader'>
+                {% if user.is_authenticated %}
+                <a href="{% url 'account_logout' %}">LOG OUT</a>
+                <div><a href="{% url 'cart' %}"><img class='cart-icon' src='https://i.ibb.co/jRtJnD8/cart.png'/> ({{ request.user.cart_size }})</a></div>
+                {% else %}
+                <a href="{% url 'account_login' %}">LOG IN</a>
+                <a href="{% url 'account_signup' %}">| SIGN UP</a>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
 
     <main>
+        {% if messages %}
+        <div class="notifMessage">
+            <ul style="list-style: none;">
+                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            </ul>
+        </div>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>
 
-    <hr>
+    
     <footer>
-        <ul>
-            <li><a href="{% url 'my_reservations' %}">My Reservations</a></li>
-            <li><a href="{% url 'my_orders' %}">My Orders</a></li>
-        </ul>
+        <div class="footer">
+            <div class="footerContent">
+                <div class="leftFooter">
+                    <div class="myAccount">
+                        <span class="footerHeaders">My Account</span>
+                        <a href="#">Profile</a>
+                        <a href="{% url 'my_orders' %}">My Orders</a>
+                        <a href="{% url 'my_reservations' %}">My Reservations</a>
+                    </div>
+    
+                    <div class="sitemap">
+                        <span class="footerHeaders">Sitemap</span>
+                        All of our pages:
+                        <ul>
+                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
+                            <li><a href="{% url 'services' %}">Services</a></li>
+                            <li><a href="{% url 'about' %}">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+    
+                <div class="rightFooter">
+                    <div class="socials">
+                        <img class="logoFooter" src="https://i.ibb.co/k6psPpp/logo.png" alt="logo">
+                        <div><a href="https://www.facebook.com/MamawsClown"><img src="https://i.ibb.co/715q9VP/fb.png" alt="fb"></a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">© Copyright 2022 Mamaw’s Clown and Party Needs</div>
+        </div>
     </footer>
     {% block scripts %}
     {% endblock %}

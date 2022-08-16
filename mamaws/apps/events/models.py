@@ -135,19 +135,38 @@ class EquipmentReservation(models.Model):
 		return self.reservation.party_name + ' - ' + self.equipment.name + ' Reservation'
 
 class Product(models.Model):
+	CATEGORY = (
+		('ballo', 'Balloons'),
+		('banne', 'Banners'),
+		('gRBox', 'Gender Reveal Box'),
+		('gWrap', 'Gift Wrapper'),
+		('tACha', 'Table and Chairs'),
+		('dCurt', 'Decorative Curtains'),
+		('cTopp', 'Cake Toppers'),
+	)
+
 	name = models.CharField(max_length=200)
 	description = models.TextField(blank=True, null=True)
 	picture = models.ImageField(upload_to='pictures/', null=True, blank=True)
 	unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 	inventory = models.IntegerField(default=0, blank=False)
 
+	category = models.CharField(max_length=5, blank=False, choices=CATEGORY)
+
 	def __str__(self):
 		return self.name
 
 class Purchase(models.Model):
+	PURCHASE_STATUS = (
+		('TO PAY', 'TO PAY'),
+		('PAID', 'PAID'),
+	)
+
 	account = models.ForeignKey(Account, on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+	status = models.CharField(max_length=15, blank=False, choices=PURCHASE_STATUS, default='TO PAY')
 
 	def __str__(self):
 		return self.account.first_name + ' ' + self.account.last_name + ' ' + str(self.created_at)
@@ -159,12 +178,14 @@ class Purchase(models.Model):
 			total += product.line_total()
 		
 		self.total_cost = total
-
-	def status(self):
-		if self.account.active_purchase_id == self.id:
-			return 'TO PAY'
-		else:
-			return 'PAID'
+	
+	def total_quantity(self):
+		total = 0
+		
+		for product in self.products.all():
+			total += product.quantity
+		
+		return total
 
 class ProductPurchase(models.Model):
 	purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name="products")
