@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="aboutContainer">
+    <div class="aboutHeader">Equipments Management</div>
+    <p>Create, retrieve, update, or delete equipments.</p>
+    <h2 style="padding: 20px;"><button style="margin: 5px; width: 100%;"><a href="{% url 'equipments_new' %}">ADD NEW EQUIPMENT</a></button></h2>
+
+    <table border="1" style="border-collapse: collapse; border-spacing: 10px; width: 80%; text-align: left;">
+        <thead>
+            <th style="padding: 10px;">NAME</th>
+            <th style="padding: 10px;">DESCRIPTION</th>
+            <th style="padding: 10px;">PRICE</th>
+            <th style="padding: 10px;"></th>
+        </thead>
+        <tbody>
+            {% for equipment in equipments %}
+            <tr style="padding: 10px;">
+                <td style="padding: 10px;">{{ equipment.name }}</td>
+                <td style="padding: 10px;">{{ equipment.description }}</td>
+                <td style="padding: 10px;">{{ equipment.price }}</td>
+                <td style="padding: 10px;">
+                    <a href="{% if equipment.picture %}{{ equipment.picture.url }}{% endif %}"><button style="margin: 5px; width: 100%;">PREVIEW</button></a>
+                    <a href="{% url 'equipments_edit' pk=equipment.id %}"><button style="margin: 5px; width: 100%;">EDIT</button></a>
+                    <a href="{% url 'equipments_delete' pk=equipment.id %}"><button style="margin: 5px; width: 100%;">REMOVE</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endblock %}

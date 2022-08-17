@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="aboutContainer">
+    <div class="aboutHeader">Edit Equipment: {{ equipment.name }}</div>
+    <p style="padding-bottom: 50px;">Update Equipment details</p>
+    <form enctype="multipart/form-data" method="post" style="text-align: left;">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            <label class="required" for="id_name">Name:</label>
+            <input type="text" name="name" value="{{ equipment.name }}" maxlength="200" required="" id="id_name">
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label class="required" for="id_description">Description:</label><br>
+            <textarea name="description" cols="40" rows="10" id="id_description">{{ equipment.description }}</textarea>
+        </div>
+        <div style="margin-bottom: 20px;">        
+            <strong><label for="id_picture">Picture:</label></strong>
+            {% if equipment.picture %}<a href="">{{ equipment.picture }}</a><br>{% endif %}
+            <input type="file" name="picture" accept="image/*" id="id_picture">
+        </div>
+
+        <div style="margin-bottom: 20px;">      
+            <label class="required" for="id_price">Price:</label>
+            <input type="number" name="price" value="{{ equipment.price }}" step="0.01" required="" id="id_price">
+        </div>
+
+        <div><input type="submit" value="Save" class="default" name="_save"></div>
+    </form>
+</div>
+{% endblock %}

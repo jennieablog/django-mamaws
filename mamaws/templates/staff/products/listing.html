@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="aboutContainer">
+    <div class="aboutHeader">Products Management</div>
+    <p>Create, retrieve, update, or delete products.</p>
+    <h2 style="padding: 20px;"><button style="margin: 5px; width: 100%;"><a href="{% url 'products_new' %}">ADD NEW PRODUCT</a></button></h2>
+
+    <table border="1" style="border-collapse: collapse; border-spacing: 10px; width: 80%; text-align: left;">
+        <thead>
+            <th style="padding: 10px;">NAME</th>
+            <th style="padding: 10px;">DESCRIPTION</th>
+            <th style="padding: 10px;">UNIT PRICE</th>
+            <th style="padding: 10px;">STOCKS</th>
+            <th style="padding: 10px;">CATEGORY</th>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr style="padding: 10px;">
+                <td style="padding: 10px;">{{ product.name }}</td>
+                <td style="padding: 10px;">{{ product.description }}</td>
+                <td style="padding: 10px;">{{ product.unit_price }}</td>
+                <td style="padding: 10px;">{{ product.inventory }}</td>
+                <td style="padding: 10px;">{{ product.get_category_display }}</td>
+                <td style="padding: 10px;">
+                    <a href="{% if product.picture %}{{ product.picture.url }}{% endif %}"><button style="margin: 5px; width: 100%;">PREVIEW</button></a>
+                    <a href="{% url 'products_edit' pk=product.id %}"><button style="margin: 5px; width: 100%;">EDIT</button></a>
+                    <a href="{% url 'products_delete' pk=product.id %}"><button style="margin: 5px; width: 100%;">REMOVE</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endblock %}

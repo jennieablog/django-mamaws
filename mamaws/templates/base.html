@@ -71,6 +71,7 @@
                 <a href="{% url 'shop' category='all' %}">SHOP</a>
                 <a href="{% url 'services' %}">SERVICES</a>
                 <a href="{% url 'about' %}">ABOUT</a>
+                {% if user.is_staff %} <a href="{% url 'dashboard' %}">ADMIN</a>{% endif %}
             </div>
 
             <div class='rightHeader'>
