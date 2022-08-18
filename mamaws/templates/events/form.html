@@ -159,7 +159,7 @@
     justify-content: space-around;
     overflow: auto;
     border-radius: 0.625rem;
-    background: rgb(199, 199, 199);
+    background: rgba(255, 255, 255, 0.35);
     padding: 3rem 3.75rem;
     gap: 5rem;
     margin-bottom: 5rem;
@@ -203,6 +203,7 @@
 /* STEP 3 CARD STYLE */
 .content3services{
     display: flex;
+    flex-direction: column;
     padding-bottom: 10rem;
 }
 .servicesCard3{
@@ -223,6 +224,71 @@
     color: #5b5aaa;
     padding-bottom: 2rem;
 }
+.leftright{
+    display: flex;
+    font-size: 1.2em;
+    justify-content: center;
+}
+.left{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.253);
+    padding: 4rem;
+    border-radius: 25px 0px 0px 25px;
+}
+.phoneNumber{
+    padding-bottom: 1.5rem;
+}
+.phoneNumber input{
+    border-radius: 0.2rem;
+    border-width: 0.01rem;
+    height: 1.5rem;
+}
+.left textarea{
+    width: 20rem;
+    border-radius: 0.3rem;
+}
+.partySummary{
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-bottom: 1rem;
+}
+.right{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 4rem;
+    width: 30rem;
+    border-radius: 0px 25px 25px 0px;
+}
+.right button{
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    margin-top: 1rem;
+    height: 2rem;
+    width: 100%;
+    color: white;
+    background-color: rgb(39, 39, 39);
+    border-radius: 10rem;
+    border-width: 0.1rem;
+    border-color: white;
+}
+.right li{
+    font-weight: 600;
+}
+.mascotsList ul{
+    padding-left: 2rem;
+}
+.servicesList ul{
+    padding-left: 2rem;
+}
+.equipmentsList ul{
+    padding-left: 2rem;
+}
+.performersList ul{
+    padding-left: 2rem;
+}
+
 </style>
 
 
@@ -387,7 +453,64 @@
                 </div>
             </div>
     
-            <section>
+
+            <div class="content3services">
+                <div class="servicesCard3">
+                    <div class="step3">Step 3: Review and Book</div>
+
+                    <div class="leftright">
+                        <div class="left">
+                            <div class="phoneNumber">
+                                <label for="id_phone_number" required>Phone number*:</label>
+                                <input type="text" id="id_phone_number" name="phone_number">
+                                <div class="invalid-feedback">
+                                    {% for error in form.phone_number.errors %}{{ error }}&nbsp;{% endfor %}
+                                </div>
+                            </div>
+                            <div>
+                                <label for="id_notes" required>Notes*:</label><br>
+                                <textarea id="id_notes" name="notes" rows="4" cols="50"></textarea>
+                                <div class="invalid-feedback">
+                                    {% for error in form.notes.errors %}{{ error }}&nbsp;{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="right">
+                            <span class="partySummary">PARTY SUMMARY</span>
+                            <div>
+
+                            </div>
+                            <ul>
+                                <li>{{ user.name }}</li>
+                                <li>{{ user.email }}</li>
+                                <li>Party Name: <span id="summary_party_name"></span></li>
+                                <li>Size: <span id="summary_party_size"></span></li>
+                                <li>Date: <span id="summary_party_date"></span></li>
+                                <li>Start time: <span id="summary_party_start_time"></span></li>
+                                <li>End time: <span id="summary_party_end_time"></span></li><br>
+                                <li class="mascotsList">Mascots:
+                                    <ul id="summary_mascot"></ul>
+                                </li>
+                                <li class="servicesList">Services:
+                                    <ul id="summary_service"></ul>
+                                </li>
+                                <li class="equipmentsList">Equipments:
+                                    <ul id="summary_equipment"></ul>
+                                </li>
+                                <li class="performersList">Performers:
+                                    <ul id="summary_performer"></ul>
+                                </li>
+                            </ul>
+                            <button type="submit">Submit Reservation</button>
+                        </div>
+                    </div>
+                </div>
+                
+
+            </div>
+            
+            <!-- <section>
                 <h3>Step 3: Review and Book</h3>
     
                 <div>
@@ -440,7 +563,7 @@
                     </li>
                 </ul>
             </section>
-            <button type="submit">Submit Reservation</button>
+            <button type="submit">Submit Reservation</button> -->
         </div>
         
 
