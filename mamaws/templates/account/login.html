@@ -3,8 +3,136 @@
 {# providers_media_js #}
 {% block content %}
 {{ form.media }}
-<div class="row m-0 p-2">
-	<h1>Log in to your account</h1>
+
+<style>
+.loginCard{
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 6rem;
+	margin-bottom: 6rem;
+	/* background-color: white; */
+}
+.coloredCard{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	background-color: rgba(255, 255, 255, 0.7);
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	height: 20rem;
+	border-radius: 2rem;
+}
+.login{
+	display: flex;
+	justify-content: center;
+	/* align-items: center; */
+	color: black;
+	font-size: 3rem;
+	font-weight: bold;
+}
+.alert{
+	color: brown;
+	padding-bottom: 1rem;
+}
+.emailrow{
+	display: flex;
+	width: 30rem;
+	justify-content: center;
+}
+.emailrow input{
+	background:none;
+	border-width: 0px;
+	border-bottom: 1px solid #000000;
+	margin-bottom: 0.5rem;
+}
+.passwordrow{
+	display: flex;
+	width: 30rem;
+	justify-content: center;
+	padding-bottom: 1rem;
+}
+.passwordrow input{
+	background:none;
+	border-width: 0px;
+	border-bottom: 1px solid #000000;
+	margin-bottom: 0.5rem;
+}
+
+.forgotpassword{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.forgotpassword button{
+	margin-top: 1rem;
+	color: white;
+	width: 20rem;
+	height: 2rem;
+	background-color: rgb(39, 39, 39);
+	border-radius: 1rem;
+	border-width: 0.1rem;
+	border-color: white;
+}
+/* .signup span{
+	display: flex;
+	width: 8rem;
+	height: 2rem;
+	justify-content: center;
+	align-items: center;
+	background: white;
+	color: black;
+	border-width: 2px 2px 2px 0px;
+	border-style: solid;
+	border-color: #181818;
+} */
+</style>
+
+
+<form method="post">
+<div class="loginCard">
+	<div class="coloredCard">
+			<span class="login">LOG IN</span>
+			<span style="padding-bottom: 1rem;">Still don't have an account? <a href="{% url 'account_signup' %}">Create one now.</a></span>
+
+			{% csrf_token %}
+			{% if form.errors %}
+			<div class="alert">
+				Invalid credentials. Please try again.
+			</div>
+			{% endif %}
+
+			<div class="emailrow">
+				<label for="id_email" class="form-label requiredField" style="padding-right: 2rem;">Email address</label>
+				<input type="email" name="login" autofocus="" class="textinput textInput form-control {% if form.login.errors %} is-invalid {% endif %}" required="" id="id_login">
+				<div class="invalid-feedback">
+					{% for error in form.login.errors %}{{ error }}&nbsp;{% endfor %}
+				</div>
+			</div>
+	
+			<div class="passwordrow">
+				<label for="id_password1" class="form-label requiredField" style="padding-right: 3.9rem;">Password</label>
+				<input type="password" name="password" class="textinput textInput form-control {% if form.password.errors %} is-invalid {% endif %}" required="" id="id_password">
+				<div class="invalid-feedback">
+					{% for error in form.password.errors %}{{ error }}&nbsp;{% endfor %}
+				</div>
+			</div>
+
+			<div class="forgotpassword">
+				<div>Forgot your password? Reset it <a href="{% url 'account_reset_password' %}">here</a>.</div>
+				<div><button type="submit" class="btn btn-primary w-100">LOG IN</button></div>
+			</div>
+	</div>
+</div>
+</form>
+
+
+
+
+<!-- <div class="row m-0 p-2">
+	<h4>Log in to your account</h4>
 	<p>Still don't have an account? <a href="{% url 'account_signup' %}">Create one now.</a></p>
 </div>
 <div class="row p-3">
@@ -46,5 +174,5 @@
 		</div>
 
 	</form>
-</div>
+</div> -->
 {% endblock %}

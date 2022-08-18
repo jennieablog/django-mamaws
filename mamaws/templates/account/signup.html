@@ -4,8 +4,130 @@
 {% block content %}
 {{ form.media }}
 
+<style>
+.signUpCard{
+	display: flex;
+	flex-direction: column;
+	/* justify-content: center; */
+	align-items: center;
+	margin-top: 5rem;
+	margin-bottom: 6rem;
+}
+.coloredCard{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.7);
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	height: 30rem;
+	width: 28rem;
+	border-radius: 2rem;
+}
+.signup{
+	display: flex;
+	justify-content: center;
+	color: black;
+	font-size: 3rem;
+	font-weight: bold;
+}
+.formContainer div{
+	display: flex;
+	flex-direction: column;
+}
+.formContainer input{
+	font-size: 1.25rem;
+	background:none;
+	width: 20rem;
+	border-width: 0px;
+	border-bottom: 1px solid #000000;
+	margin-bottom: 0.5rem;
+}
+.formContainer label{
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+.submitButton{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.submitButton button{
+	margin-top: 1rem;
+	color: white;
+	width: 15rem;
+	height: 2rem;
+	background-color: rgb(39, 39, 39);
+	border-radius: 1rem;
+	border-width: 0.1rem;
+	border-color: white;
+}
+</style>
 
-<div class="row m-0 p-2">
+<form method="post">
+<div class="signUpCard">
+	<div class="coloredCard">
+		<span class="signup">Create an account</span>
+		<span style="padding-bottom: 1rem; width: 20rem; font-size: 0.9rem; text-align: center;">You must have an account to participate in any of our events. Already have one? <a href="{% url 'account_login' %}">Sign in.</a></span>
+
+		<div>
+			{% csrf_token %}
+			<div class="formContainer">
+				<div>
+					<label for="id_first_name" class="form-label">First name*</label>
+					<input type="text" name="first_name" maxlength="30" id="id_first_name" class="form-control mb-0" required="">
+				</div>
+				<div>
+					<label for="id_last_name" class="form-label">Last name*</label>
+					<input type="text" name="last_name" maxlength="150" id="id_last_name" class="form-control mb-0" required="">
+				</div>
+
+				<div>
+					<label for="id_email" class="form-label requiredField">Email address*</label>
+					<input type="email" name="email" autofocus="" class="textinput textInput form-control {% if form.email.errors %} is-invalid {% endif %}" required="" id="id_email">
+					<div class="invalid-feedback">
+						{% for error in form.email.errors %}{{ error }}&nbsp;{% endfor %}
+					</div>
+				</div>
+	
+				<div>
+					<label for="id_password1" class="form-label requiredField">Password*</label>
+					<input type="password" name="password1" class="textinput textInput form-control {% if form.password1.errors %} is-invalid {% endif %}" required="" id="id_password1">
+					<div class="invalid-feedback">
+						{% for error in form.password1.errors %}{{ error }}&nbsp;{% endfor %}
+					</div>
+				</div>
+	
+				<div>
+					<label for="id_password2" class="form-label requiredField">Confirm your password*</label>
+					<input type="password" name="password2" class="textinput textInput form-control {% if form.password2.errors %} is-invalid {% endif %}" required="" id="id_password2">
+					<div class="invalid-feedback">
+						<ul>
+							{% for error in form.password2.errors %}
+							<li>{{ error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+
+				<div >
+					<div class="submitButton">
+						<button type="submit" id="signup-btn">SUBMIT</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+</form>
+
+
+
+
+
+<!-- <div class="row m-0 p-2">
 	<h1>Create an account</h1>
 	<p>You must have an account to participate in any of our events. Already have one? <a href="{% url 'account_login' %}">Sign in.</a></p>
 </div>
@@ -57,5 +179,5 @@
 			</div>
 		</div>
 	</form>
-</div>
+</div> -->
 {% endblock %}

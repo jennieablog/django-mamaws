@@ -218,6 +218,26 @@
         border-collapse: separate;
         border-spacing: 0 15px;
     }
+    .payNowButton{
+        color: white;
+        width: 12rem;
+        height: 2rem;
+        background-color: rgb(39, 39, 39);
+        border-radius: 1rem;
+        border-width: 0.1rem;
+        border-color: white;
+        margin-top: 0.5rem;
+    }
+    .removeButton{
+        color: white;
+        width: 4rem;
+        height: 1.5rem;
+        background-color: rgb(39, 39, 39);
+        border-radius: 0.5rem;
+        border-width: 0.1rem;
+        border-color: white;
+    }
+
 </style>
 
 <div class="shopWrapper">
@@ -236,11 +256,11 @@
 
                 <p style="text-align: right; font-size: 1.5rem;"><strong>Total: </strong> PHP {{ order.total_cost }}</p>
 
-                {% if order.status == 'TO PAY' %}<button style="margin: 10px 0px; width: 100%; font-size: 1.5rem;"><a href="">PAY NOW</a></button>{% endif %}
+                {% if order.status == 'TO PAY' %}<button class="payNowButton"><a href="">PAY NOW</a></button>{% endif %}
             </div>
         </div>
         <div class="catalog" >
-            <span class="headerCategory">PARTICULARS</span>
+            <span class="headerCategory">PRODUCTS</span>
             <table width="100%">
                 <thead style="font-size: 1rem;">
                     <th style="width: 5%; text-align: left;">#</th>
@@ -259,7 +279,7 @@
                         <td style="text-align: right;">{{ product.unit_price }}</td>
                         <td style="text-align: right;">{{ product.quantity }} pcs</td>
                         <td style="text-align: right;">{{ product.line_total }}</td>
-                        {% if order.status == 'TO PAY' %}<td style="text-align: right;"><button><a href="{% url 'delete_purchase' pk=product.id %}">Remove</a></td>{%endif%}
+                        {% if order.status == 'TO PAY' %}<td style="text-align: right;"><button class="removeButton"><a href="{% url 'delete_purchase' pk=product.id %}">Remove</a></td>{%endif%}
                     </tr>
                     {% endfor %}
                 </tbody>
