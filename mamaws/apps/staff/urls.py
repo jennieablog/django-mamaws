@@ -31,13 +31,10 @@ urlpatterns = [
     path('products/<int:pk>/edit', products_edit, name='products_edit'),
     path('products/<int:pk>/delete', products_delete, name='products_delete'),
 
-    # path('services/', services, name='services'), #form
-    # path('my_reservations/', my_reservations, name='my_reservations'), #listing
-    # path('my_reservations/<int:pk>', reservation_details, name='reservation_details'), #show
-    # path('my_reservations/<int:pk>/pay', payment, name='payment'),
-    # path('shop/category=<str:category>', shop, name='shop'), #listing
-    # path('cart/', cart, name='cart'),
-	# path('cart/<int:pk>/delete', delete_purchase, name='delete_purchase'),
-    # path('my_orders', my_orders, name='my_orders'), #listing
-    # path('my_orders/<int:pk>', order_details, name='order_details'), #show
+    path('reservations/', reservations_listing, name='reservations_listing'),
+    path('reservations/<int:pk>/process', reservations_process, name='reservations_process'),
+
+    path('orders/', orders_listing, name='orders_listing'),
+    path('orders/<int:pk>/deliver', orders_deliver, name='orders_deliver'),
+    path('orders/<int:pk>/fulfill', orders_fulfill, name='orders_fulfill'),
 ]

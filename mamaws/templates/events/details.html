@@ -5,43 +5,66 @@
 <h1>{{ reservation.party_name }} ({{reservation.status}})</h1>
 
 <h3>Summary</h3>
+
+<br><br>
+
 <ul>
-    <li>{{ user.name }}</li>
-    <li>{{ user.email }}</li>
-    <li>Party Name: {{ reservation.party_name }}</li>
-    <li>Size: {{ reservation.party_size }}</li>
-    <li>Date: {{ reservation.party_date }}</span></li>
-    <li>Start time: {{ reservation.party_start_time }}</li>
-    <li>End time: {{ reservation.party_end_time }}</li>
-    <li>Mascots:
+    <li><strong>Booked By:</strong> {{ reservation.account.name }}</li>
+    <li><strong>Email:</strong> {{ reservation.account.email }}</li>
+    <li><strong>Contact No.:</strong> {{ reservation.phone_number }}</li>
+    <li><strong>Notes:</strong> {{ reservation.notes }}</li>
+
+    <br><br>
+
+    <li><strong>Party Name:</strong> {{ reservation.party_name }}</li>
+    <li><strong>Size:</strong> {{ reservation.party_size }}</li>
+    <li><strong>Date:</strong> {{ reservation.party_date }}</span></li>
+    <li><strong>Start time:</strong> {{ reservation.party_start_time }}</li>
+    <li><strong>End time:</strong> {{ reservation.party_end_time }}</li>
+    
+    <br><br>
+    
+    <li>MASCOTS
         <ul>
             {% for mascot in reservation.mascots.all %}
-            <li>{{ mascot.mascot.name }}</li>
+            <li>{{ mascot.mascot.name }} | {{ mascot.price }}</li>
             {% endfor %}
         </ul>
     </li>
-    <li>Services:
+
+    <br><br>
+
+    <li>SERVICES
         <ul>
             {% for service in reservation.services.all %}
-            <li>{{ service.service.name }}</li>
+            <li>{{ service.service.name }} | {{ service.price }}</li>
             {% endfor %}
         </ul>
     </li>
-    <li>Equipments:
+
+    <br><br>
+
+    <li>EQUIPMENTS
         <ul>
             {% for equipment in reservation.equipments.all %}
-            <li>{{ equipment.equipment.name }}</li>
+            <li>{{ equipment.equipment.name }} | {{ equipment.price }}</li>
             {% endfor %}
         </ul>
     </li>
-    <li>Performers:
+
+    <br><br>
+
+    <li>PERFORMERS
         <ul>
             {% for performer in reservation.performers.all %}
-            <li>{{ performer.performer.name }}</li>
+            <li>{{ performer.performer.name }} | {{ performer.price }}</li>
             {% endfor %}
         </ul>
     </li>
 </ul>
 
+<hr>
+
+<h4>TOTAL: {{ reservation.total_cost }}</h4>
 
 {% endblock %}

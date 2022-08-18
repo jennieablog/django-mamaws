@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import AccountCreationForm, AccountChangeForm
-from .models import Account
+from .models import Account, Notification
 
 class AccountAdmin(UserAdmin):
 	fieldsets = (
@@ -31,3 +31,4 @@ class AccountAdmin(UserAdmin):
 	readonly_fields = ['created_at', 'updated_at', 'last_login']
 
 admin.site.register(Account, AccountAdmin)
+admin.site.register(Notification)

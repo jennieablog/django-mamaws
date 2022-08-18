@@ -22,16 +22,13 @@
     <div style="padding-top: 20px; text-align: center;">
         <h3>Party Reservations Management</h3>
         <ul style="text-align: center; list-style: none;">
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">ALL</a></button>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">Pending</a></button>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">Approved</a></button>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">Paid</a></button>
+            <button style="margin: 10px; padding: 10px;"><a href="{% url 'reservations_listing' %}">Events</a></button>
         </ul>
     </div>
 
     <div style="padding-top: 20px; text-align: center;">
         <h3>Orders Management</h3>
-        <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">Sales</a></button>
+        <button style="margin: 10px; padding: 10px;"><a href="{% url 'orders_listing' %}">Sales</a></button>
     </div>
 </div>
 {% endblock %}

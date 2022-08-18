@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Party Reservations</h2>
+<hr>
+
+<h3>Pending Reservations</h3>
+<ul>
+    {% for reservation in pending_reservations %}
+    <li>
+        <a href="{% url 'reservations_process' pk=reservation.id %}">Event ID: {{ reservation.id }} ({{ reservation.status }})</a> | {{ reservation.party_date }} {{ reservation.party_start_time }} - {{ reservation.party_end_time }} | Created at: {{ reservation.created_at }} | Booked by: {{ reservation.account }} | TOTAL: {{ reservation.total_cost }}
+    </li>
+    {% endfor %}
+</ul>
+<p><strong>TOTAL:</strong> {{ pending_reservations_total }}</p>
+<hr>
+<h3>Shipped Reservations</h3>
+<ul>
+    {% for reservation in approved_reservations %}
+    <li>
+        <a href="{% url 'reservations_process' pk=reservation.id %}">Event ID: {{ reservation.id }} ({{ reservation.status }})</a> | {{ reservation.party_date }} {{ reservation.party_start_time }} - {{ reservation.party_end_time }} | Created at: {{ reservation.created_at }} | Booked by: {{ reservation.account }} | TOTAL: {{ reservation.total_cost }}| APPROVED: {{ reservation.processing_date }}
+    </li>
+    {% endfor %}
+</ul>
+<p><strong>TOTAL:</strong> {{ approved_reservations_total }}</p>
+<hr>
+<h3>Delivered Reservations</h3>
+<ul>
+    {% for reservation in rejected_reservations %}
+    <li>
+        <a href="{% url 'reservations_process' pk=reservation.id %}">Event ID: {{ reservation.id }} ({{ reservation.status }})</a> | {{ reservation.party_date }} {{ reservation.party_start_time }} - {{ reservation.party_end_time }} | Created at: {{ reservation.created_at }} | Booked by: {{ reservation.account }} | TOTAL: {{ reservation.total_cost }}| REJECTED: {{ reservation.processing_date }}
+    </li>
+    {% endfor %}
+</ul>
+<p><strong>TOTAL:</strong> {{ rejected_reservations_total }}</p>
+
+{% endblock %}

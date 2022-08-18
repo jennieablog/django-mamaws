@@ -4,6 +4,7 @@ import requests
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Sum
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -227,3 +228,79 @@ def products_delete(request, pk):
 	messages.success(request, _('Product successfully removed!'))
 	return redirect('products_listing')
 
+@staff_member_required
+def reservations_listing(request):
+	context = {
+		"pending_reservations": Reservation.objects.filter(status='PENDING'),
+		"approved_reservations": Reservation.objects.filter(status='APPROVED'),
+		"rejected_reservations": Reservation.objects.filter(status='REJECTED'),
+		"pending_reservations_total": Reservation.objects.filter(status='PENDING').aggregate(total=Sum('total_cost'))['total'],
+		"approved_reservations_total": Reservation.objects.filter(status='APPROVED').aggregate(total=Sum('total_cost'))['total'],
+		"rejected_reservations_total": Reservation.objects.filter(status='REJECTED').aggregate(total=Sum('total_cost'))['total'],
+	}
+
+	return render(request, 'staff/reservations/listing.html', context)
+
+@staff_member_required
+def reservations_process(request, pk):
+	reservation = get_object_or_404(Reservation, id=pk)
+
+	if request.method == 'POST':
+		reservation.status = request.POST['status']
+		reservation.remarks = request.POST['remarks']
+		reservation.save()
+
+		if reservation.status == 'APPROVED':
+			message = 'Your reservation for ' + reservation.party_name + ' has been approved. Our team will get in touch with you within the next 72 hours.'
+		else:
+			message = 'Your reservation for ' + reservation.party_name + ' has been rejected for the following reason/s: ' + reservation.remarks
+
+		send_notification(request, message, '/my_reservations/' + str(reservation.id), reservation.account)
+		messages.success(request, _('Reservation for ' + reservation.party_name + ' successfully approved.'))
+		return redirect('reservations_listing')
+
+	context = {
+		"reservation": reservation
+	}
+
+	return render(request, 'staff/reservations/form.html', context)
+
+@staff_member_required
+def orders_listing(request):
+	context = {
+		"pending_orders": Purchase.objects.filter(status='PREPARING'),
+		"shipped_orders": Purchase.objects.filter(status='SHIPPED OUT'),
+		"fulfilled_orders": Purchase.objects.filter(status='DELIVERED'),
+		"pending_orders_total": Purchase.objects.filter(status='PREPARING').aggregate(total=Sum('total_cost'))['total'],
+		"shipped_orders_total": Purchase.objects.filter(status='SHIPPED OUT').aggregate(total=Sum('total_cost'))['total'],
+		"fulfilled_orders_total": Purchase.objects.filter(status='DELIVERED').aggregate(total=Sum('total_cost'))['total'],
+	}
+
+	return render(request, 'staff/orders/listing.html', context)
+
+@staff_member_required
+def orders_deliver(request, pk):
+	order = get_object_or_404(Purchase, id=pk)
+	order.deliver()
+
+	message = 'Your order with Purchase ID#' + str(order.id) + ' is now out for delivery. Please prepare exact amount for COD.'
+	send_notification(request, message, '/my_orders/' + str(order.id), order.account)
+
+	messages.success(request, _('Order with Purchase ID#' + str(order.id) +' is now out for delivery.'))
+	return redirect('orders_listing')
+
+@staff_member_required
+def orders_fulfill(request, pk):
+	order = get_object_or_404(Purchase, id=pk)
+	order.fulfill()
+
+	message = 'Your order with Purchase ID#' + str(order.id) + ' has been delivered.'
+	send_notification(request, message, '/my_orders/' + str(order.id), order.account)
+
+	messages.success(request, _('Order with Purchase ID#' + str(order.id) +' has been delivered.'))
+	return redirect('orders_listing')
+
+def send_notification(request, message, url, user):
+	notif = Notification.objects.create(account=user, message=message, url=url)
+	notif.save()
+	return

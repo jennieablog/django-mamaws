@@ -7,9 +7,6 @@
     {% for reservation in reservations %}
     <li>
         <a href="{% url 'reservation_details' pk=reservation.id %}">{{ reservation.party_name }} ({{reservation.status}})</a>
-        {% if reservation.status == 'APPROVED' %}
-            <button><a href="{% url 'payment' pk=reservation.id %}">Pay now</a></button>
-        {% endif %}
     </li>
     {% endfor %}
 </ul>
