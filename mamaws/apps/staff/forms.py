@@ -27,3 +27,8 @@ class ProductForm(forms.ModelForm):
 	class Meta:
 		model = Product
 		fields = ('name', 'description', 'picture','unit_price','inventory','category',)
+
+class PerformerApplicationForm(forms.ModelForm):
+	class Meta:
+		model = PerformerApplication
+		fields = ('full_name', 'email', 'phone_number', 'picture', 'resume',)

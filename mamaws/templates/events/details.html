@@ -63,9 +63,9 @@
     <div class="summary">
         <span class="partyName">{{ reservation.party_name }} ({{reservation.status}})</span>
         <span class="partySummary">PARTY SUMMARY</span>
-        <span>{{ user.name }}</span>
-        <span>{{ user.email }}</span>
-        <span>09012345678</span>
+        <span>{{ reservation.account.name }}</span>
+        <span>{{ reservation.account.email }}</span>
+        <span>{{ reservation.phone_number }}</span>
         
         <hr style="margin-bottom: 1rem;">
     

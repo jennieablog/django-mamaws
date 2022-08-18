@@ -8,9 +8,6 @@ class HomePageView(TemplateView):
 class AboutPageView(TemplateView):
     template_name = 'pages/about.html'
 
-class ContactPageView(TemplateView):
-    template_name = 'pages/contact.html'
-
 def error404PageView(request, exception):
     response = render(request, 'pages/404.html', status=404)
     response.status_code = 404

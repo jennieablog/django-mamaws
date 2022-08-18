@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Moul&family=Roboto+Flex:opsz@8..144&display=swap');
+    
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        text-decoration: none;
+    }
+    * a{
+        color: black;
+    }
+    body{
+        background: linear-gradient(90deg, #CFECEE 13.39%, #F5B9B9 53.57%, #C3C2FB 85.51%);
+        font-family: 'Roboto Flex', sans-serif;
+    }
+    
+    
+    /* CONTENTS STYLE */
+    .appContainer{
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+        margin-bottom: 5rem;
+    }
+    .appImage{
+        background: url("https://i.ibb.co/vL9Lvc8/background-Application-IMG.png");
+        font-size: 2rem;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-repeat: no-repeat;
+        background-size:cover;
+        margin-right: 2rem;
+        padding: 13rem;
+    }
+    
+    .appForm{
+        background: white;
+        padding: 2.5rem;
+        width: 28rem;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .appForm p{
+        font-size: 1.5rem;
+    }
+    .appForm label{
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .appForm input{
+        width: 100%;
+        height: 1.5rem;
+        border: solid 1px;
+        border-radius: 5px;
+    }
+    .appForm input[class="upload"]{
+        width: 100%;
+        border:0;
+        border-radius: 2px;
+    }
+    
+    .uploadButtons{
+        text-align: center;
+        display: block;
+        width: 14rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        font-size: 1.5rem;
+        background: white;
+        height: 3rem;
+        cursor: pointer;
+        box-shadow: 0px .25rem .25rem rgba(0, 0, 0, 0.25);
+        border-radius: .625rem;
+    }
+    
+    .submitButton{
+        border-radius: 1rem;
+        width: 23rem;
+        height: 4.5rem;
+        font-size: 1.5rem;
+        text-align: center;
+        color: white;
+        background: black;
+        cursor: pointer;
+        transition: .25s;
+    }    
+    
+</style>
+
+<div class="appContainer">
+    <div class="appImage">
+        <div>Make someone happy<br>with your talents</div>
+    </div>
+    <div class="appForm">
+        <h1>APPLY NOW</h1><br>
+
+        {% if has_submitted %}
+        <p>Hi! You're application has been received. Please wait 3-5 working days for processing. Here is your reference number to track your application: </p>
+
+        <h1 style="padding: 20px 0; text-align: center;">{{ reference_number }}</h1>
+        
+        <br><br>
+        <p><a href="{% url 'performer_application_status' %}">You may check the status of your application here.</a></p>
+        {% else %}
+
+        <p style="margin-bottom: 10px;">Interested in performing in one of our parties? Enter the info and submit a resume below.</p>
+
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 20px;">
+                <label class="required" for="id_full_name">Full Name*</label><br>
+                <input type="text" name="full_name" value="" maxlength="200" required="" id="id_full_name"><br>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label class="required" for="id_email">Email*</label><br>
+                <input type="email" name="email" value="" required="" id="id_email"><br>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label class="required" for="id_phone_number">Phone Number*</label><br>
+                <input type="text" name="phone_number" maxlength="200" required="" id="id_phone_number"><br>
+            </div>
+
+            <div style="margin-bottom: 20px;">        
+                <strong><label for="id_picture">ID Picture*</label></strong>
+                <input type="file" name="picture" accept="image/*" id="id_picture" required="">
+            </div>
+            
+            <div style="margin-bottom: 20px;">        
+                <strong><label for="id_resume">Upload resume*</label></strong>
+                <input type="file" name="resume" accept="application/pdf" id="id_resume" required="">
+            </div>
+
+            <button class="submitButton">Submit for Approval</button>
+        </form>
+        <br><br>
+        <p style="padding-top: 20px;"><a href="{% url 'performer_application_status' %}">Already Applied? Check the status of your application here.</a></p>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

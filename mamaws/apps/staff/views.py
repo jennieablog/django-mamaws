@@ -300,6 +300,48 @@ def orders_fulfill(request, pk):
 	messages.success(request, _('Order with Purchase ID#' + str(order.id) +' has been delivered.'))
 	return redirect('orders_listing')
 
+def performer_application(request):
+	if request.method == 'POST':
+		form = PerformerApplicationForm(request.POST, request.FILES)
+		if form.is_valid():
+			application = form.save(commit=False)
+			application.hash_code = hash(application.full_name) % 10 ** 8
+			application.save()
+			messages.success(request, _('You have successfully submitted your application!'))
+			return render(request, 'staff/applications/form.html', { 'has_submitted' : True, 'reference_number' : application.hash_code })
+		else:
+			messages.error(request, _('There was an error:'+str(form.errors)))
+	
+	return render(request, 'staff/applications/form.html',  { 'has_submitted' : False})
+
+def performer_application_status(request):
+	if request.method == 'POST':
+		hash_code = request.POST['reference_number']
+		application = get_object_or_404(PerformerApplication, hash_code=hash_code)
+		return render(request, 'staff/applications/status.html', { 'application' : application })
+	return render(request, 'staff/applications/status.html', { 'application' : None})
+
+@staff_member_required
+def performer_application_listing(request):
+	context = {
+		"applications": PerformerApplication.objects.all(),
+	}
+
+	return render(request, 'staff/applications/listing.html', context)
+
+@staff_member_required
+def performer_application_details(request, pk):
+	application = get_object_or_404(PerformerApplication, id=pk)
+	context = {
+		"application": application,
+	}
+
+	return render(request, 'staff/applications/details.html', context)
+
+@staff_member_required
+def performer_application_approve(request, pk):
+	return
+
 def send_notification(request, message, url, user):
 	notif = Notification.objects.create(account=user, message=message, url=url)
 	notif.save()
