@@ -57,11 +57,8 @@ button{
                     <tr>
                         <td style="text-align: left;"><a href="{% url 'reservation_details' pk=reservation.id %}">{{ reservation.party_name }} </a></td>
                         <td style="text-align: center;">({{reservation.status}})</td>
-                        <td style="text-align: right;">Php n/a</td>
+                        <td style="text-align: right;">Php {{ reservation.total_cost }}</td>
                         <td style="text-align: right;">
-                            {% if reservation.status == 'APPROVED' %}
-                            <button><a href="{% url 'payment' pk=reservation.id %}">Pay now</a></button>
-                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %} 

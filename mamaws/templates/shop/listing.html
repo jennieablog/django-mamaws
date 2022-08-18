@@ -56,13 +56,10 @@ button{
                     {% for order in orders %}
                     <tr>
                         <td style="text-align: left;"><a href="{% url 'order_details' pk=order.id %}">{{ order.id }}</a></td>
-                        <td style="text-align: center;">--DATE--</td>
-                        <td style="text-align: right;">--PRICE--</td>
+                        <td style="text-align: center;">{{ order.created_at }}</td>
+                        <td style="text-align: right;">{{ order.total_cost }}</td>
                         <td style="text-align: right;">{{ order.status }}</td>
                         <td style="text-align: right;">
-                            {% if order.status == 'APPROVED' %}
-                            <button><a href="{% url 'payment' pk=reservation.id %}">Pay now</a></button>
-                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %} 

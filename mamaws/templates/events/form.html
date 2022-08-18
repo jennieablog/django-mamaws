@@ -340,8 +340,11 @@
                                 {% for error in form.party_end_time.errors %}{{ error }}&nbsp;{% endfor %}
                             </div>    
 
-                            <label>Party Location*</label>
-                            <input type="text"/>
+                            <label for="id_party_address" required>Party address*:</label>
+                            <input onchange="updateSummary(this);" type="text" id="id_party_address" name="party_address">
+                            <div class="invalid-feedback">
+                                {% for error in form.party_address.errors %}{{ error }}&nbsp;{% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -363,6 +366,8 @@
                             <div class="itemCard">
                                 {% if mascot.picture %}
                                 <div class="itemImage"><img src="{{ mascot.picture.url }}" alt="{{ mascot.picture.url }}"></div>
+                                {% else %}
+                                <div class="itemImage"><img src="https://via.placeholder.com/250"></div>
                                 {% endif %}
                                 <div class="itemDetails">
                                     <p>{{ mascot.name }}</p>
@@ -387,7 +392,11 @@
                         <div class="itemCatalog">
                             {% for service in services %}
                             <div class="itemCard">
-                                {% if service.picture %}<div class="itemImage"><img src="{{ service.picture.url }}" alt="{{ service.picture.url }}"></div>{% endif %}
+                                {% if service.picture %}
+                                <div class="itemImage"><img src="{{ service.picture.url }}" alt="{{ service.picture.url }}"></div>
+                                {% else %}
+                                <div class="itemImage"><img src="https://via.placeholder.com/250"></div>
+                                {% endif %}
                                 <div class="itemDetails">
                                     <p>{{ service.name }}</p>
                                     <p> {{ service.description }}</p>
@@ -413,6 +422,8 @@
                                 <div class="itemCard">
                                     {% if equipment.picture %}
                                     <div class="itemImage"><img src="{{ equipment.picture.url }}"></div>
+                                    {% else %}
+                                    <div class="itemImage"><img src="https://via.placeholder.com/250"></div>
                                     {% endif %}
                                     <div class="itemDetails">
                                         <p>{{ equipment.name }}</p>
@@ -439,11 +450,16 @@
                                 <input onchange="updateListSummary(this);" class="performer" type="checkbox" id="performer{{forloop.counter}}" name="performer{{forloop.counter}}" value="{{ performer.id }}" data-name="{{ performer.name }}">
                                 {% if performer.picture %}
                                 <div class="performerImage"><img src="{{ performer.picture.url }}"></div>
+                                {% else %}
+                                <div class="performerImage"><img src="https://via.placeholder.com/250"></div>
                                 {% endif %}
                                 <div class="performerDetails">
                                     <span class="performerName">{{ performer.name }}</span>
                                     <div>
-                                        <p><a href="#">click for more details</a></p>
+                                        <p> {{ performer.description }}</p>
+                                    </div>
+                                    <div>
+                                        <p> {{ performer.price }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -461,15 +477,15 @@
                     <div class="leftright">
                         <div class="left">
                             <div class="phoneNumber">
-                                <label for="id_phone_number" required>Phone number*:</label>
+                                <label for="id_phone_number" required>Phone number*</label><br>
                                 <input type="text" id="id_phone_number" name="phone_number">
                                 <div class="invalid-feedback">
                                     {% for error in form.phone_number.errors %}{{ error }}&nbsp;{% endfor %}
                                 </div>
                             </div>
                             <div>
-                                <label for="id_notes" required>Notes*:</label><br>
-                                <textarea id="id_notes" name="notes" rows="4" cols="50"></textarea>
+                                <label for="id_notes" required>Party Notes*</label><br>
+                                <textarea id="id_notes" name="notes" rows="10" cols="50"></textarea>
                                 <div class="invalid-feedback">
                                     {% for error in form.notes.errors %}{{ error }}&nbsp;{% endfor %}
                                 </div>
@@ -477,30 +493,34 @@
                         </div>
         
                         <div class="right">
-                            <span class="partySummary">PARTY SUMMARY</span>
-                            <div>
-
-                            </div>
+                            <span class="partySummary">Party Summary</span>
+                            <hr>
                             <ul>
-                                <li>{{ user.name }}</li>
-                                <li>{{ user.email }}</li>
-                                <li>Party Name: <span id="summary_party_name"></span></li>
-                                <li>Size: <span id="summary_party_size"></span></li>
-                                <li>Date: <span id="summary_party_date"></span></li>
-                                <li>Start time: <span id="summary_party_start_time"></span></li>
-                                <li>End time: <span id="summary_party_end_time"></span></li><br>
+                                <li>Customer Name: <span style="font-weight:100;">{{ user.name }}</span></li>
+                                <li>Email: <span style="font-weight:100;">{{ user.email }}</span></li>
+                                <br>
+                                <li>Party Name: <span style="font-weight:100;" id="summary_party_name"></span></li>
+                                <li>Size: <span style="font-weight:100;" id="summary_party_size"></span></li>
+                                <li>Date: <span style="font-weight:100;" id="summary_party_date"></span></li>
+                                <li>Address: <span style="font-weight:100;" id="summary_party_address"></span></li><br>
+                                <li>Start time: <span style="font-weight:100;" id="summary_party_start_time"></span></li>
+                                <li>End time: <span style="font-weight:100;" id="summary_party_end_time"></span></li><br>
+                                <hr><br>
                                 <li class="mascotsList">Mascots:
                                     <ul id="summary_mascot"></ul>
-                                </li>
+                                </li><br>
+                                <hr><br>
                                 <li class="servicesList">Services:
                                     <ul id="summary_service"></ul>
-                                </li>
+                                </li><br>
+                                <hr><br>
                                 <li class="equipmentsList">Equipments:
                                     <ul id="summary_equipment"></ul>
-                                </li>
+                                </li><br>
+                                <hr><br>
                                 <li class="performersList">Performers:
                                     <ul id="summary_performer"></ul>
-                                </li>
+                                </li><br>
                             </ul>
                             <button type="submit">Submit Reservation</button>
                         </div>
@@ -576,11 +596,17 @@
 {% block scripts %}
 <script>
     function loadSummary() {
-        const names = ["party_name", "party_size", "party_date","party_start_time", "party_end_time"];
+        const names = ["party_name", "party_size", "party_date", "party_address","party_start_time", "party_end_time"];
         names.forEach((name)=>{
             let el = document.getElementById('id_' + name);
             updateSummary(el);
         }) 
+
+       var checkboxes = document.querySelectorAll('input[type=checkbox]');
+       console.log(checkboxes)
+       checkboxes.forEach((checkbox) => {
+            updateListSummary(checkbox)
+       })
     }
 
     function updateSummary(el) {
@@ -599,7 +625,9 @@
             parent.appendChild(item);
         } else {
             let item = document.querySelector('[id=summary_'+el.id+']')
-            item.remove();
+            if (item != null) {
+                item.remove()
+            }
         }
     }
 
