@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'mamaws.apps.accounts',
     'mamaws.apps.pages',
     'mamaws.apps.events',
+    'mamaws.apps.staff',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

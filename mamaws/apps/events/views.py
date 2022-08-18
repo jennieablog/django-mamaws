@@ -9,6 +9,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from mamaws.apps.accounts.models import *
+
 from .forms import ReservationCreationForm
 from .models import *
 import json
@@ -88,14 +91,6 @@ def reservation_details(request, pk):
 	return render(request, 'events/details.html', context)
 
 @login_required
-def payment(request, pk):
-	reservation = get_object_or_404(Reservation, id=pk)
-	context = {
-		"reservation": reservation,
-	}
-	return render(request, 'events/payment.html', context)
-
-@login_required
 def shop(request, category):
 	if request.method == "POST":
 		product_id = request.POST['product']
@@ -143,6 +138,36 @@ def cart(request):
 	return render(request, 'shop/cart.html', context)
 
 @login_required
+def cart_checkout(request):
+	purchase = get_object_or_404(Purchase, id=request.user.active_purchase_id)
+	products = ProductPurchase.objects.filter(purchase=purchase)
+
+	if request.method == "POST":
+		shipping_address = request.POST['shipping_address']
+		payment_method = request.POST['payment_method']
+		purchase.shipping_address = shipping_address
+		purchase.payment_method = payment_method
+		purchase.status = 'PREPARING'
+		purchase.paid_at = timezone.now()
+		purchase.save()
+
+		new_cart = Purchase.objects.create(account=request.user)
+		new_cart.save()
+
+		request.user.active_purchase_id = new_cart.id
+		request.user.cart_size = 0
+		request.user.save()
+
+		messages.success(request, _('Successfully checked out your cart!'))
+		return redirect('my_orders')
+	context = {
+		"products": products,
+		"order": purchase,
+	}
+
+	return render(request, 'shop/checkout.html', context)
+
+@login_required
 def delete_purchase(request, pk):
 	product_purchase = get_object_or_404(ProductPurchase, id=pk)
 	purchase = product_purchase.purchase
@@ -168,10 +193,24 @@ def my_orders(request):
 @login_required
 def order_details(request, pk):
 	purchase = get_object_or_404(Purchase, id=pk)
-	if purchase.account == request.user:
+	if purchase.account == request.user or request.user.is_staff:
 		context = {
 			"order": purchase,
 			"products": purchase.products.all(),
 		}
 		return render(request, 'shop/details.html', context)
 	return render(request, 'pages/404.html')
+
+@login_required
+def notifications(request):
+	notifications = Notification.objects.filter(account=request.user).order_by('-created_at')
+
+	for notification in notifications:
+		notification.is_read = True
+		notification.save()
+
+	context = {
+		"notifications": notifications,
+	}
+
+	return render(request, 'account/notification.html', context)

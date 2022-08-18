@@ -57,6 +57,7 @@ class Reservation(models.Model):
 
 	account = models.ForeignKey(Account, on_delete=models.CASCADE)
 	status = models.CharField(max_length=15, blank=False, choices=RESERVATION_STATUS)
+	remarks = models.TextField(blank=True, null=True)
 
 	party_name = models.CharField(max_length=200)
 	party_address = models.CharField(max_length=200)
@@ -159,7 +160,13 @@ class Product(models.Model):
 class Purchase(models.Model):
 	PURCHASE_STATUS = (
 		('TO PAY', 'TO PAY'),
-		('PAID', 'PAID'),
+		('PREPARING', 'PREPARING'),
+		('SHIPPED OUT', 'SHIPPED OUT'),
+		('DELIVERED', 'DELIVERED'),
+	)
+
+	PAYMENT_METHOD = (
+		('COD', 'COD'),
 	)
 
 	account = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -167,6 +174,11 @@ class Purchase(models.Model):
 	total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
 	status = models.CharField(max_length=15, blank=False, choices=PURCHASE_STATUS, default='TO PAY')
+
+	shipping_address = models.CharField(max_length=200, null=True, blank=True)
+	payment_method = models.CharField(max_length=15, null=True, blank=True, choices=PAYMENT_METHOD, default='COD')
+	paid_at = models.DateTimeField(null=True, blank=True)
+	delivered_at = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
 		return self.account.first_name + ' ' + self.account.last_name + ' ' + str(self.created_at)
@@ -186,6 +198,15 @@ class Purchase(models.Model):
 			total += product.quantity
 		
 		return total
+
+	def deliver(self):
+		self.status = 'SHIPPED OUT'
+		self.save()
+	
+	def fulfill(self):
+		self.status = 'DELIVERED'
+		self.delivered_at = timezone.now()
+		self.save()
 
 class ProductPurchase(models.Model):
 	purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name="products")

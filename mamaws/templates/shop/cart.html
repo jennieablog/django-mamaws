@@ -118,19 +118,25 @@
 
     <div class="subWrapperShop">
         <div class="shopCategoryContainer">
-            <span class="headerCategory">INVOICE REF#{{ order.id }}</span>
+            <span class="headerCategory">ORDER REF#{{ order.id }}</span>
             <div class="shopCategoriesContainer">
+                <p><strong>Bill To: </strong><br>{{ order.account.first_name }} {{ order.account.last_name }}</p><br>
+
                 <p><strong>Creation Date: </strong><br>{{ order.created_at }}</p><br>
 
-                <p><strong>Payment Date: </strong><br>{% if order.status == 'TO PAY' %}-{% else %}{{ order.paid_at }}{% endif %}</p><br>
+                <p><strong>Checkout Date: </strong><br>{% if order.status == 'TO PAY' %}-{% else %}{{ order.paid_at }}{% endif %}</p><br>
 
-                <p><strong>Status: </strong><br>{{ order.status }}</p><br>
+                <p><strong>Delivery Date: </strong><br>{% if order.status == 'DELIVERED' %}{{ order.delivered_at }}{% else %}-{% endif %}</p><br>
+
+                <p><strong>Status: </strong><br>{% if user.cart_size > 0 %}{{ order.status }}{% else %}-{% endif %}</p><br>
                 
                 <hr><br>
 
-                <p style="text-align: right; font-size: 1.5rem;"><strong>Total: </strong> PHP {{ order.total_cost }}</p>
+                <p style="text-align: center; font-size: 1.5rem;"><strong>Total: </strong> PHP {{ order.total_cost }}</p>
 
-                <button class="payNowButton"><a href="">PAY NOW</a></button>
+                {% if order.status == 'TO PAY' and user.cart_size > 0 %}
+                <a href="{% url 'cart_checkout' %}"><button class="payNowButton">CHECKOUT</button></a>
+                {% endif %}
             </div>
         </div>
         <div class="catalog">

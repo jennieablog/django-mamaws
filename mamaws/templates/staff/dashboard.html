@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="aboutContainer">
+    <div class="aboutHeader">Admin Dashboard</div>
+    <p style="padding-bottom: 50px;">Manage your transactions, products, and services.</p>
+
+
+    <div style="padding-top: 20px; text-align: center;">
+        <h3>Service Management</h3>
+            <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">Mascots</a></button>
+            <button style="margin: 10px; padding: 10px;"><a href="{% url 'services_listing' %}">Services</a></button>
+            <button style="margin: 10px; padding: 10px;"><a href="{% url 'equipments_listing' %}">Equipments</a></button>
+            <button style="margin: 10px; padding: 10px;"><a href="{% url 'performers_listing' %}">Performers</a></button>
+    </div>
+
+    <div style="padding-top: 20px; text-align: center;">
+        <h3>Shop Management</h3>
+        <button style="margin: 10px; padding: 10px;"><a href="{% url 'products_listing' %}">Products</a></button>
+    </div>
+
+    <div style="padding-top: 20px; text-align: center;">
+        <h3>Party Reservations Management</h3>
+        <ul style="text-align: center; list-style: none;">
+            <button style="margin: 10px; padding: 10px;"><a href="{% url 'reservations_listing' %}">Events</a></button>
+        </ul>
+    </div>
+
+    <div style="padding-top: 20px; text-align: center;">
+        <h3>Orders Management</h3>
+        <button style="margin: 10px; padding: 10px;"><a href="{% url 'orders_listing' %}">Sales</a></button>
+    </div>
+</div>
+{% endblock %}

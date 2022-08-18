@@ -74,6 +74,7 @@
             <span><strong>Party size: </strong>{{ reservation.party_size }}</span>
         </div>
 
+
         <div class="row">
             <span><strong>Start time: </strong>{{ reservation.party_start_time }}</span>
             <span><strong>End time: </strong>{{ reservation.party_end_time }}</span>
@@ -137,32 +138,44 @@
     <li>Mascots:
         <ul>
             {% for mascot in reservation.mascots.all %}
-            <li>{{ mascot.mascot.name }}</li>
+            <li>{{ mascot.mascot.name }} | {{ mascot.price }}</li>
             {% endfor %}
         </ul>
     </li>
-    <li>Services:
+
+    <br><br>
+
+    <li>SERVICES
         <ul>
             {% for service in reservation.services.all %}
-            <li>{{ service.service.name }}</li>
+            <li>{{ service.service.name }} | {{ service.price }}</li>
             {% endfor %}
         </ul>
     </li>
-    <li>Equipments:
+
+    <br><br>
+
+    <li>EQUIPMENTS
         <ul>
             {% for equipment in reservation.equipments.all %}
-            <li>{{ equipment.equipment.name }}</li>
+            <li>{{ equipment.equipment.name }} | {{ equipment.price }}</li>
             {% endfor %}
         </ul>
     </li>
-    <li>Performers:
+
+    <br><br>
+
+    <li>PERFORMERS
         <ul>
             {% for performer in reservation.performers.all %}
-            <li>{{ performer.performer.name }}</li>
+            <li>{{ performer.performer.name }} | {{ performer.price }}</li>
             {% endfor %}
         </ul>
     </li>
 </ul> -->
 
+<hr>
+
+<h4>TOTAL: {{ reservation.total_cost }}</h4>
 
 {% endblock %}

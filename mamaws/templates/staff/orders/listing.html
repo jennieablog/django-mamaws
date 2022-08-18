@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Customer Orders</h2>
+<hr>
+
+<h3>Pending Orders</h3>
+<ul>
+    {% for order in pending_orders %}
+    <li>
+        <a href="{% url 'order_details' pk=order.id %}">Purchase ID: {{ order.id }} ({{ order.status }})</a> | Created at: {{ order.created_at }} | Ordered by: {{ order.account }} | TOTAL: {{ order.total_cost }}| <a href="{% url 'orders_deliver' pk=order.id %}"><button>DELIVER</button></a>
+    </li>
+    {% endfor %}
+</ul>
+<p><strong>TOTAL:</strong> {{ pending_orders_total }}</p>
+<hr>
+<h3>Shipped Orders</h3>
+<ul>
+    {% for order in shipped_orders %}
+    <li>
+        <a href="{% url 'order_details' pk=order.id %}">Purchase ID: {{ order.id }} ({{ order.status }})</a> | Created at: {{ order.created_at }} | Ordered by: {{ order.account }} | TOTAL: {{ order.total_cost }}| <a href="{% url 'orders_fulfill' pk=order.id %}"><button>FULFILL</button></a>
+    </li>
+    {% endfor %}
+</ul>
+<p><strong>TOTAL:</strong> {{ shipped_orders_total }}</p>
+<hr>
+<h3>Delivered Orders</h3>
+<ul>
+    {% for order in fulfilled_orders %}
+    <li>
+        <a href="{% url 'order_details' pk=order.id %}">Purchase ID: {{ order.id }} ({{ order.status }})</a> | Created at: {{ order.created_at }} | Ordered by: {{ order.account }} | TOTAL: {{ order.total_cost }}| FULFILLED: {{ order.delivered_at }}
+    </li>
+    {% endfor %}
+</ul>
+<p><strong>TOTAL:</strong> {{ fulfilled_orders_total }}</p>
+
+{% endblock %}

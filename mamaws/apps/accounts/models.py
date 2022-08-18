@@ -15,3 +15,16 @@ class Account(AbstractUser):
 
 	def name(self):
 		return self.first_name + ' ' + self.last_name
+	
+	def notification_count(self):
+		return Notification.objects.filter(account=self, is_read=False).count()
+
+class Notification(models.Model):
+	account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="notifications")
+	message = models.CharField(max_length=200)
+	url = models.CharField(max_length=200)
+	is_read = models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return self.message

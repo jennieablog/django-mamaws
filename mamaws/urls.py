@@ -21,6 +21,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', include('mamaws.apps.pages.urls')),
     path('', include('mamaws.apps.events.urls')),
+    path('administrator/', include('mamaws.apps.staff.urls')),
 ]
 
 handler404 = 'mamaws.apps.pages.views.error404PageView'
