@@ -59,7 +59,7 @@
 </style>
 
 <div class="content">
-    <div class="button"><button><a href="#" onclick="window.history.back()">back</a></button></div>
+    <div class="button"><button class="saveButton" onclick="window.history.go(-1)">Back</button></div>
     <div class="summary">
         <span class="partyName">{{ application.full_name }} ({{application.status}})</span>
         <span><strong>Reference Number:</strong> {{ application.hash_code }}</span>
