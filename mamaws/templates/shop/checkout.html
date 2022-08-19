@@ -73,18 +73,6 @@
         border-width: 0.1rem;
         border-color: white;
     }
-    /* .signup span{
-        display: flex;
-        width: 8rem;
-        height: 2rem;
-        justify-content: center;
-        align-items: center;
-        background: white;
-        color: black;
-        border-width: 2px 2px 2px 0px;
-        border-style: solid;
-        border-color: #181818;
-    } */
 </style>
 
 <div class="loginCard">
@@ -93,9 +81,10 @@
 
 			<form method="post" style="padding: 20px;">
                 {% csrf_token %}
-                <div style="margin-bottom: 20px;">
+                <div id="div_id_search_address" style="margin-bottom: 20px;">
                     <label class="required" for="id_shipping_address">Shipping Address:</label><br>
                     <input type="text" name="shipping_address" value="" maxlength="200" required="" id="id_shipping_address" style="width: 100%;">
+                    <br><small><a href="#" onclick="initAutocomplete();">Clear address</a></small>
                 </div>
             
                 <div style="margin-bottom: 20px;">
@@ -105,10 +94,57 @@
                     </select>
                 </div>
             
-                <div class="forgotpassword"><button type="submit" value="Save" name="_save" class="btn btn-primary w-100">SAVE</button></div>
+                <div class="forgotpassword"><button id="save-btn" type="submit" value="Save" name="_save" class="btn btn-primary w-100" onclick="fillInAddress();">SAVE</button></div>
             </form>
 	</div>
 </div>
 
+{% endblock %}
 
+{% block scripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-z1LbdTmltBEO__PtdKVTQ6-ZuzvO1XE&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+    <script>
+        let autocomplete;
+        let address1Field;
+        let address2Field;
+        let postalField;
+        
+        function initAutocomplete() {
+            address1Field = document.querySelector("#id_shipping_address");
+            address1Field.value = "";
+            address1Field.removeAttribute('readonly');
+
+            // Create the autocomplete object, restricting the search predictions to Philippines
+            autocomplete = new google.maps.places.Autocomplete(address1Field, {
+                componentRestrictions: { country: [ 'PH' ] },
+                fields: ["address_components", "geometry"],
+                types: ["address"],
+            });
+            address1Field.focus();
+            
+            // When the user selects an address from the drop-down, populate the
+            // address fields in the form.
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+        
+        function fillInAddress() {
+            if (autocomplete == null) {
+                autocomplete = new google.maps.places.Autocomplete(address1Field, {
+                    componentRestrictions: { country: [ 'PH' ] },
+                    fields: ["address_components", "geometry"],
+                    types: ["address"],
+                });
+            }
+
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
+
+            if (place == null || !place.geometry) {
+                // User did not select a prediction
+                address1Field.setCustomValidity("Please select a valid address.");
+            } else {
+                document.querySelector("#id_shipping_address").setAttribute('readonly', 'readonly');
+            }
+        }
+    </script>
 {% endblock %}
