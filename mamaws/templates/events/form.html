@@ -385,7 +385,7 @@
                                     <p> {{ mascot.description }}</p>
                                     <div>
                                         <p>Php {{ mascot.price }}</p>
-                                        <input onchange="updateListSummary(this);" class="mascot" type="checkbox" id="mascot{{forloop.counter}}" name="mascot{{forloop.counter}}" value="{{ mascot.id }}" data-name="{{ mascot.name }}">
+                                        <input onchange="updateListSummary(this);" class="mascot" type="checkbox" id="mascot{{forloop.counter}}" name="mascot{{forloop.counter}}" value="{{ mascot.id }}" data-name="{{ mascot.name }}" data-price="{{ mascot.price }}">
                                     </div>
                                 </div>
                             </div>
@@ -413,7 +413,7 @@
                                     <p> {{ service.description }}</p>
                                     <div>
                                         <p>Php {{ service.price }}</p>
-                                        <input onchange="updateListSummary(this);" class="service" type="checkbox" id="service{{forloop.counter}}" name="service{{forloop.counter}}" value="{{ service.id }}" data-name="{{ service.name }}">
+                                        <input onchange="updateListSummary(this);" class="service" type="checkbox" id="service{{forloop.counter}}" name="service{{forloop.counter}}" value="{{ service.id }}" data-name="{{ service.name }}" data-price="{{ service.price }}">
                                     </div>
                                 </div>
                             </div>
@@ -441,7 +441,7 @@
                                         <p>{{ equipment.description }}</p>
                                         <div>
                                             <p>Php {{ equipment.price }}</p>
-                                            <input onchange="updateListSummary(this);" class="equipment" type="checkbox" id="equipment{{forloop.counter}}" name="equipment{{forloop.counter}}" value="{{ equipment.id }}" data-name="{{ equipment.name }}">
+                                            <input onchange="updateListSummary(this);" class="equipment" type="checkbox" id="equipment{{forloop.counter}}" name="equipment{{forloop.counter}}" value="{{ equipment.id }}" data-name="{{ equipment.name }}" data-price="{{ equipment.price }}">
                                         </div>
                                     </div>
                                 </div>
@@ -458,7 +458,7 @@
                         <div class="performerCatalog">
                             {% for performer in performers %}
                             <div class="performerCard">
-                                <input onchange="updateListSummary(this);" class="performer" type="checkbox" id="performer{{forloop.counter}}" name="performer{{forloop.counter}}" value="{{ performer.id }}" data-name="{{ performer.name }}">
+                                <input onchange="updateListSummary(this);" class="performer" type="checkbox" id="performer{{forloop.counter}}" name="performer{{forloop.counter}}" value="{{ performer.id }}" data-name="{{ performer.name }}" data-price="{{ performer.price }}">
                                 {% if performer.picture %}
                                 <div class="performerImage"><img src="{{ performer.picture.url }}"></div>
                                 {% else %}
@@ -467,7 +467,7 @@
                                 <div class="performerDetails">
                                     <span class="performerName">{{ performer.name }}</span>
                                     <div>
-                                        <p><a href="#"><em>Click for more details</em></a></p>
+                                        <p><a href="{% url 'performer_details' pk=performer.id %}"><em>Click for more details</em></a></p>
                                     </div>
                                     <div>
                                         <p> {{ performer.price }}</p>
@@ -510,12 +510,12 @@
                                 <li>Customer Name: <span style="font-weight:100;">{{ user.name }}</span></li>
                                 <li>Email: <span style="font-weight:100;">{{ user.email }}</span></li>
                                 <br>
-                                <li>Party Name: <span style="font-weight:100;" id="summary_party_name"></span></li>
-                                <li>Size: <span style="font-weight:100;" id="summary_party_size"></span></li>
-                                <li>Date: <span style="font-weight:100;" id="summary_party_date"></span></li>
-                                <li>Address: <span style="font-weight:100;" id="summary_party_address"></span></li><br>
-                                <li>Start time: <span style="font-weight:100;" id="summary_party_start_time"></span></li>
-                                <li>End time: <span style="font-weight:100;" id="summary_party_end_time"></span></li><br>
+                                <li>Party Name: <span style="font-weight:100;" id="summary_party_name">-</span></li>
+                                <li>Size: <span style="font-weight:100;" id="summary_party_size">-</span></li>
+                                <li>Date: <span style="font-weight:100;" id="summary_party_date">-</span></li>
+                                <li>Address: <span style="font-weight:100;" id="summary_party_address">-</span></li><br>
+                                <li>Start time: <span style="font-weight:100;" id="summary_party_start_time">-</span></li>
+                                <li>End time: <span style="font-weight:100;" id="summary_party_end_time">-</span></li><br>
                                 <hr><br>
                                 <li class="mascotsList">Mascots:
                                     <ul id="summary_mascot"></ul>
@@ -533,7 +533,9 @@
                                     <ul id="summary_performer"></ul>
                                 </li><br>
                             </ul>
-                            <button type="submit" id="save-btn" onclick="fillInAddress();">Submit Reservation</button>
+                            <hr style="margin: 1rem 0;">
+                            <h2>TOTAL: <span id="id_total"></span></h2>
+                            <button type="submit" id="save-btn" onclick="fillInAddress();" style="margin-top: 20px;">Submit Reservation</button>
                         </div>
                     </div>
                 </div>
@@ -549,7 +551,9 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-z1LbdTmltBEO__PtdKVTQ6-ZuzvO1XE&callback=initAutocomplete&libraries=places&v=weekly" async></script>
 <script>
+    let total_cost = 0
     function loadSummary() {
+        total_cost = 0
         const names = ["party_name", "party_size", "party_date", "party_address","party_start_time", "party_end_time"];
         names.forEach((name)=>{
             let el = document.getElementById('id_' + name);
@@ -559,14 +563,20 @@
        var checkboxes = document.querySelectorAll('input[type=checkbox]');
        checkboxes.forEach((checkbox) => {
             updateListSummary(checkbox)
+
+            if (checkbox.checked) {
+                total_cost = total_cost + parseFloat(checkbox.getAttribute("data-price"));
+            }
        })
+
+       document.getElementById('id_total').innerText = total_cost;
     }
 
     function updateSummary(el) {
         var summary = 'summary_';
         var name = el.name;
         var value = el.value;
-        document.getElementById(summary+name).innerText = el.value;
+        document.getElementById(summary+name).innerText = value;
     }
 
     function updateListSummary(el) {
@@ -574,7 +584,7 @@
             var parent = document.querySelector('[id=summary_'+el.attributes.class.nodeValue+']')
             var item = document.createElement("li");
             item.setAttribute("id", 'summary_'+el.id);
-            item.innerText = el.getAttribute("data-name");
+            item.innerText = el.getAttribute("data-name") + ' (' + el.getAttribute("data-price") + ')';
             parent.appendChild(item);
         } else {
             let item = document.querySelector('[id=summary_'+el.id+']')
@@ -582,6 +592,15 @@
                 item.remove()
             }
         }
+
+        total_cost = 0
+        var checkboxes = document.querySelectorAll('input[type=checkbox]');
+        checkboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    total_cost = total_cost + parseFloat(checkbox.getAttribute("data-price"));
+                }
+        });
+        document.getElementById('id_total').innerText = total_cost;
     }
 
     loadSummary();

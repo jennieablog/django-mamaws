@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='Reservation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('PENDING', 'PENDING'), ('APPROVED', 'APPROVED'), ('DENIED', 'DENIED')], max_length=15)),
+                ('status', models.CharField(choices=[('PENDING', 'PENDING'), ('APPROVED', 'APPROVED'), ('REJECTED', 'REJECTED')], max_length=15)),
                 ('party_name', models.CharField(max_length=200)),
                 ('party_size', models.IntegerField(default=0)),
                 ('party_date', models.DateField(blank=True, null=True)),

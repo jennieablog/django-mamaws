@@ -52,7 +52,7 @@ class Reservation(models.Model):
 	RESERVATION_STATUS = (
 		('PENDING', 'PENDING'),
 		('APPROVED', 'APPROVED'),
-		('DENIED', 'DENIED'),
+		('REJECTED', 'REJECTED'),
 	)
 
 	account = models.ForeignKey(Account, on_delete=models.CASCADE)

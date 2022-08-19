@@ -214,3 +214,22 @@ def notifications(request):
 	}
 
 	return render(request, 'account/notification.html', context)
+
+@login_required
+def performer_details(request, pk):
+	performer = get_object_or_404(Performer, id=pk)
+
+	context = {
+		"performer": performer,
+	}
+	return render(request, 'events/performer.html', context)
+
+@login_required
+def product_details(request, pk):
+	product = get_object_or_404(Product, id=pk)
+
+	context = {
+		"product": product,
+	}
+	return render(request, 'shop/product.html', context)
+

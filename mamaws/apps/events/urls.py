@@ -14,4 +14,6 @@ urlpatterns = [
     path('my_orders', my_orders, name='my_orders'), #listing
     path('my_orders/<int:pk>', order_details, name='order_details'), #show
     path('notifications/', notifications, name='notifications'),
+    path('performer/<int:pk>', performer_details, name='performer_details'), #show
+    path('product/<int:pk>', product_details, name='product_details'), #show
 ]

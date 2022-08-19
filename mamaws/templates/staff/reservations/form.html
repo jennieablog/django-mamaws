@@ -140,7 +140,7 @@
                 <label for="id_status">Action:</label>
                 <select name="status" required="" id="id_status">
                     <option value="APPROVED" {% if reservation.status == 'APPROVED' %}selected="selected"{% endif %}>APPROVE</option>
-                    <option value="DENIED" {% if reservation.status == 'DENIED' %}selected="selected"{% endif %}>DENY</option>
+                    <option value="REJECTED" {% if reservation.status == 'REJECTED' %}selected="selected"{% endif %}>REJECT</option>
                     <option value="PENDING" {% if reservation.status == 'PENDING' %}selected="selected"{% endif %}>PENDING</option>
                 </select>
             </div>

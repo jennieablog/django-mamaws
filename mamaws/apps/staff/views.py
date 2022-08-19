@@ -237,10 +237,10 @@ def reservations_listing(request):
 	context = {
 		"pending_reservations": Reservation.objects.filter(status='PENDING').order_by('created_at'),
 		"approved_reservations": Reservation.objects.filter(status='APPROVED').order_by('processed_at'),
-		"rejected_reservations": Reservation.objects.filter(status='DENIED').order_by('processed_at'),
+		"rejected_reservations": Reservation.objects.filter(status='REJECTED').order_by('processed_at'),
 		"pending_reservations_total": Reservation.objects.filter(status='PENDING').aggregate(total=Sum('total_cost'))['total'],
 		"approved_reservations_total": Reservation.objects.filter(status='APPROVED').aggregate(total=Sum('total_cost'))['total'],
-		"rejected_reservations_total": Reservation.objects.filter(status='DENIED').aggregate(total=Sum('total_cost'))['total'],
+		"rejected_reservations_total": Reservation.objects.filter(status='REJECTED').aggregate(total=Sum('total_cost'))['total'],
 	}
 
 	return render(request, 'staff/reservations/listing.html', context)
@@ -359,7 +359,7 @@ def reservations_report(request, status):
 	status = status.upper()
 
 	order_by_property = 'created_at'
-	if (status in ['APPROVED', 'DENIED']):
+	if (status in ['APPROVED', 'REJECTED']):
 		order_by_property = 'processed_at'
 
 	pdf = html_to_pdf('staff/reports/reservations.html', {

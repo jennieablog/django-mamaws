@@ -18,7 +18,7 @@
                             Created at:
                             {% elif status == 'APPROVED' %}
                             Approved at:
-                            {% elif status == 'DENIED' %}
+                            {% elif status == 'REJECTED' %}
                             Rejected at:
                             {% endif %}
                         </th>
@@ -36,7 +36,7 @@
                                 {{ reservation.created_at }}
                                 {% elif status == 'APPROVED' %}
                                 {{ reservation.processed_at }}
-                                {% elif status == 'DENIED' %}
+                                {% elif status == 'REJECTED' %}
                                 {{ reservation.processed_at }}
                                 {% endif %}
                             </td>
