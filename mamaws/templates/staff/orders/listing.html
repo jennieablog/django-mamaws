@@ -1,37 +1,343 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Customer Orders</h2>
-<hr>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        color: inherit;
+        text-decoration: inherit;
+        list-style: outside none none;
+        --scrollbarBG: #CFD8DC;
+        --thumbBG: #e7a9ff;
+        scrollbar-width: thin;
+        scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+    }
 
-<h3>Pending Orders</h3>
-<ul>
-    {% for order in pending_orders %}
-    <li>
-        <a href="{% url 'order_details' pk=order.id %}">Purchase ID: {{ order.id }} ({{ order.status }})</a> | Created at: {{ order.created_at }} | Ordered by: {{ order.account }} | TOTAL: {{ order.total_cost }}| <a href="{% url 'orders_deliver' pk=order.id %}"><button>DELIVER</button></a>
-    </li>
-    {% endfor %}
-</ul>
-<p><strong>TOTAL:</strong> {{ pending_orders_total }}</p>
-<hr>
-<h3>Shipped Orders</h3>
-<ul>
-    {% for order in shipped_orders %}
-    <li>
-        <a href="{% url 'order_details' pk=order.id %}">Purchase ID: {{ order.id }} ({{ order.status }})</a> | Created at: {{ order.created_at }} | Ordered by: {{ order.account }} | TOTAL: {{ order.total_cost }}| <a href="{% url 'orders_fulfill' pk=order.id %}"><button>FULFILL</button></a>
-    </li>
-    {% endfor %}
-</ul>
-<p><strong>TOTAL:</strong> {{ shipped_orders_total }}</p>
-<hr>
-<h3>Delivered Orders</h3>
-<ul>
-    {% for order in fulfilled_orders %}
-    <li>
-        <a href="{% url 'order_details' pk=order.id %}">Purchase ID: {{ order.id }} ({{ order.status }})</a> | Created at: {{ order.created_at }} | Ordered by: {{ order.account }} | TOTAL: {{ order.total_cost }}| FULFILLED: {{ order.delivered_at }}
-    </li>
-    {% endfor %}
-</ul>
-<p><strong>TOTAL:</strong> {{ fulfilled_orders_total }}</p>
+    body {
+        background: linear-gradient(90deg, #CFECEE 13.39%, #F5B9B9 53.57%, #C3C2FB 85.51%);
+        font-family: 'Roboto Flex', sans-serif;
+    }
+
+    *::-webkit-scrollbar {
+        width: 20px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: var(--scrollbarBG);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--thumbBG);
+        border-radius: 10px;
+        border: 3px solid var(--scrollbarBG);
+    }
+
+    /* CSS STYLE FOR NAVBAR */
+    .header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .infoSection {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        font-weight: bolder;
+        font-family: 'Roboto Flex', sans-serif;
+    }
+
+    .navigation {
+        display: flex;
+        height: 7.813rem;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+        background: white;
+        padding-left: 10.5rem;
+        padding-right: 10.5rem;
+        font-weight: bolder;
+    }
+
+    .leftHeader {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .leftHeader a {
+        color: inherit;
+        text-decoration: inherit;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+
+    .logoHeader {
+        background: #ffffff;
+        border-radius: 100%;
+        height: 10rem;
+        width: 10rem;
+        padding: 1rem;
+        border: 2px solid black;
+    }
+
+    .rightHeader {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .user-icon {
+        width: 2.5rem;
+    }
+
+    /* CSS STYLE FOR FOOTER */
+    .footer {
+        height: 20rem;
+        display: flex;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 2px solid #000000;
+        justify-content: center;
+    }
+
+    .footerHeaders {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .copyright {
+        padding-left: 5rem;
+        padding-top: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .footerContent {
+        display: flex;
+        padding-left: 14rem;
+        padding-right: 14rem;
+    }
+
+    .leftFooter {
+        display: flex;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .leftFooter a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    .myAccount {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .sitemap {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .rightFooter {
+        display: flex;
+        width: 100%;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .socials {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logoFooter {
+        background: #FFFFFF;
+        border-radius: 100%;
+        height: 10rem;
+        width: 10rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .notifMessage {
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 1rem;
+        background-color: rgb(149, 255, 237);
+    }
+
+    .servicesContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 8rem;
+        margin-bottom: 8rem;
+    }
+
+    .orders {
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        margin-top: 5rem;
+        margin-bottom: 6rem;
+    }
+
+    .coloredCard {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.7);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 2rem;
+        padding: 2rem;
+    }
+
+    .myOrders {
+        display: flex;
+        align-self: start;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-bottom: 1rem;
+        color: rgb(109, 21, 192);
+    }
+
+    button {
+        color: white;
+        width: 6rem;
+        height: 1.5rem;
+        background-color: rgb(39, 39, 39);
+        border-radius: 0.5rem;
+        border-color: white;
+        margin-left: 1rem;
+    }
+</style>
+
+<!-- SHOP FOR PENDING -->
+<div class="orders">
+    <div class="coloredCard">
+        <span class="myOrders">SHOP ORDERS (PENDING)</span>
+        <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+
+        <table width="1200px">
+            <thead style="font-size: 1rem;">
+                <th style="width: 7%; text-align: left;">Purchase ID</th>
+                <th style="width: 15%; text-align: center;">Account:</th>
+                <th style="width: 15%; text-align: center;">Order Created at:</th>
+                <th style="width: 10%; text-align: center;">Total Cost</th>
+                <th style="width: 10%; text-align: right;">Status</th>
+                <th style="width: 15%; text-align: right;">Order Approved at:</th>
+                <th style="width: 5%; text-align: right;"></th>
+                <th style="width: 5%; text-align: right;"></th>
+            </thead>
+            <tbody>
+                {% for order in pending_orders %}
+                <tr>
+                    <td style="text-align: left;"><a href="{% url 'order_details' pk=order.id %}">{{ order.id }}</a></td>
+                    <td style="text-align: center;">{{ order.account }}</td>
+                    <td style="text-align: center;">{{ order.created_at }}</td>
+                    <td style="text-align: center;">{{ order.total_cost }}</td>
+                    <td style="text-align: right;">{{ order.status }}</td>
+                    <td style="text-align: right;">{{ order.created_at }}</td>
+                    <td style="text-align: right;">
+                        <button><a href="{% url 'order_details' pk=order.id %}">View</a></button>
+                    </td>
+                    <td style="text-align: right;">
+                        {% if order.status == 'PREPARING' %}
+                        <button><a href="{% url 'orders_deliver' pk=order.id %}">Deliver</a></button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SHOP FOR SHIPPED OUT -->
+<div class="orders">
+    <div class="coloredCard">
+        <span class="myOrders">SHOP ORDERS (SHIPPED OUT)</span>
+        <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+
+        <table width="1200px">
+            <thead style="font-size: 1rem;">
+                <th style="width: 7%; text-align: left;">Purchase ID</th>
+                <th style="width: 15%; text-align: center;">Account:</th>
+                <th style="width: 15%; text-align: center;">Order Created at:</th>
+                <th style="width: 10%; text-align: center;">Total Cost</th>
+                <th style="width: 10%; text-align: right;">Status</th>
+                <th style="width: 15%; text-align: right;">Order Shipped at:</th>
+                <th style="width: 5%; text-align: right;"></th>
+                <th style="width: 5%; text-align: right;"></th>
+            </thead>
+            <tbody>
+                {% for order in shipped_orders %}
+                <tr>
+                    <td style="text-align: left;"><a href="{% url 'order_details' pk=order.id %}">{{ order.id }}</a></td>
+                    <td style="text-align: center;">{{ order.account }}</td>
+                    <td style="text-align: center;">{{ order.created_at }}</td>
+                    <td style="text-align: center;">{{ order.total_cost }}</td>
+                    <td style="text-align: right;">{{ order.status }}</td>
+                    <td style="text-align: right;">{{ order.shipped_at }}</td>
+                    <td style="text-align: right;">
+                        <button><a href="{% url 'order_details' pk=order.id %}">View</a></button>
+                    </td>
+                    <td style="text-align: right;">
+                        {% if order.status == 'SHIPPED OUT' %}
+                        <button><a href="{% url 'orders_fulfill' pk=order.id %}">Fulfill</a></button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SHOP FOR SHIPPED OUT -->
+<div class="orders">
+    <div class="coloredCard">
+        <span class="myOrders">SHOP ORDERS (DELIVERED)</span>
+        <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+
+        <table width="1200px">
+            <thead style="font-size: 1rem;">
+                <th style="width: 10%; text-align: left;">Purchase ID</th>
+                <th style="width: 15%; text-align: center;">Account:</th>
+                <th style="width: 15%; text-align: center;">Order Created at:</th>
+                <th style="width: 15%; text-align: center;">Total Cost</th>
+                <th style="width: 10%; text-align: right;">Status</th>
+                <th style="width: 15%; text-align: right;">Order Delivered at:</th>
+                <th style="width: 10%; text-align: right;"></th>
+            </thead>
+            <tbody>
+                {% for order in fulfilled_orders %}
+                <tr>
+                    <td style="text-align: left;"><a href="{% url 'order_details' pk=order.id %}">{{ order.id }}</a></td>
+                    <td style="text-align: center;">{{ order.account }}</td>
+                    <td style="text-align: center;">{{ order.created_at }}</td>
+                    <td style="text-align: center;">{{ order.total_cost }}</td>
+                    <td style="text-align: right;">{{ order.status }}</td>
+                    <td style="text-align: right;">
+                        {{ order.delivered_at }}
+                    </td>
+                    <td style="text-align: right;">
+                        <button><a href="{% url 'order_details' pk=order.id %}">View</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

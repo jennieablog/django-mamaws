@@ -76,7 +76,8 @@
 
             <div class='rightHeader'>
                 {% if user.is_authenticated %}
-                <a href="{% url 'account_logout' %}">LOG OUT</a>
+                <span style="padding: 0 20px;">{{ user.username }}</span>|
+                <span style="padding: 0 20px;"><a href="{% url 'account_logout' %}">LOG OUT</a></span>
                 <div><a href="{% url 'cart' %}"><img class='cart-icon' src='https://i.ibb.co/jRtJnD8/cart.png'/> ({{ request.user.cart_size }})</a></div>
                 <div><a href="{% url 'notifications' %}"><img class='cart-icon' src='https://i.ibb.co/nzDsfCC/notificationbell-logo.png'/> ({{ request.user.notification_count }})</a></div>
                 {% else %}
@@ -92,7 +93,7 @@
         {% if messages %}
         <div class="notifMessage">
             <ul style="list-style: none;">
-                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+                {% for message in messages %}<li>{% autoescape off %} {{ message }} {% endautoescape %}</li>{% endfor %}
             </ul>
         </div>
         {% endif %}
@@ -107,19 +108,19 @@
                 <div class="leftFooter">
                     <div class="myAccount">
                         <span class="footerHeaders">My Account</span>
-                        <a href="#">Profile</a>
                         <a href="{% url 'my_orders' %}">My Orders</a>
                         <a href="{% url 'my_reservations' %}">My Reservations</a>
                     </div>
     
                     <div class="sitemap">
                         <span class="footerHeaders">Sitemap</span>
-                        All of our pages:
                         <ul>
                             <li><a href="{% url 'home' %}">Home</a></li>
                             <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
                             <li><a href="{% url 'services' %}">Services</a></li>
-                            <li><a href="{% url 'about' %}">About</a></li>
+                            <li><a href="{% url 'about' %}">About</a></li><br>
+                            <hr><br>
+                            <li><a href="{% url 'performer_application' %}">Apply as a Performer now!</a></li>
                         </ul>
                     </div>
                 </div>

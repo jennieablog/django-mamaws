@@ -47,21 +47,27 @@ button{
         <hr style="width: 100%; margin-bottom:1rem;">
         <table width="1000px">
                 <thead style="font-size: 1rem;">
-                    <th style="width: 40%; text-align: left;">Party Name</th>
-                    <th style="width: 25%; text-align: center;">Party Status</th>
+                    <th style="width: 30%; text-align: left;">Party Name</th>
+                    <th style="width: 30%; text-align: center;">Party Status</th>
                     <th style="width: 25%; text-align: right;">Price</th>
-                    <th style="width: 10%; text-align: right;"></th>
+                    <th style="width: 20%; text-align: right;"></th>
                 </thead>
                 <tbody>
                     {% for reservation in reservations %}
                     <tr>
                         <td style="text-align: left;"><a href="{% url 'reservation_details' pk=reservation.id %}">{{ reservation.party_name }} </a></td>
-                        <td style="text-align: center;">({{reservation.status}})</td>
-                        <td style="text-align: right;">Php n/a</td>
-                        <td style="text-align: right;">
-                            {% if reservation.status == 'APPROVED' %}
-                            <button><a href="#">Pay now</a></button>
+
+                        <td style="text-align: center;">
+                            {{reservation.status}} - 
+                            {% if reservation.status == 'PENDING' %}
+                                {{ reservation.created_at }}
+                            {% else %}
+                                {{ reservation.processed_at }}
                             {% endif %}
+                        </td>
+                        <td style="text-align: right;">Php {{ reservation.total_cost }}</td>
+                        <td style="text-align: right;">
+                            <button><a href="{% url 'reservation_details' pk=reservation.id %}">View</a></button>
                         </td>
                     </tr>
                     {% endfor %} 
