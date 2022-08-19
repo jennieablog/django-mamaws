@@ -19,6 +19,10 @@ from .models import *
 
 import json
 
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa  
+
 @staff_member_required
 def dashboard(request):
 	return render(request, 'staff/dashboard.html')
@@ -350,7 +354,64 @@ def performer_application_details(request, pk):
 
 	return render(request, 'staff/applications/details.html', context)
 
+@staff_member_required
+def reservations_report(request, status):
+	status = status.upper()
+
+	order_by_property = 'created_at'
+	if (status in ['APPROVED', 'DENIED']):
+		order_by_property = 'processed_at'
+
+	pdf = html_to_pdf('staff/reports/reservations.html', {
+		"reservations": Reservation.objects.filter(status=status).order_by(order_by_property),
+		"status": status,
+		"now": timezone.now()
+	})
+	return HttpResponse(pdf, content_type='application/pdf')
+
+@staff_member_required
+def sales_report(request, status):
+	status = status.upper()
+
+	order_by_property = {
+		'PREPARING': 'paid_at',
+		'SHIPPED OUT': 'shipped_at',
+		'DELIVERED': 'delivered_at',
+	}
+
+	pdf = html_to_pdf('staff/reports/orders.html', {
+		"orders": Purchase.objects.filter(status=status).order_by(order_by_property[status]),
+		"status": status,
+		"now": timezone.now()
+	})
+	return HttpResponse(pdf, content_type='application/pdf')
+
+@staff_member_required
+def applications_report(request, status):
+	status = status.upper()
+
+	order_by_property = 'created_at'
+	if (status in ['APPROVED', 'REJECTED']):
+		order_by_property = 'processed_at'
+
+	pdf = html_to_pdf('staff/reports/applications.html', {
+		"applications": PerformerApplication.objects.filter(status=status).order_by(order_by_property),
+		"status": status,
+		"now": timezone.now()
+	})
+	return HttpResponse(pdf, content_type='application/pdf')
+
 def send_notification(request, message, url, user):
 	notif = Notification.objects.create(account=user, message=message, url=url)
 	notif.save()
 	return
+
+# defining the function to convert an HTML file to a PDF file
+def html_to_pdf(template_src, context_dict={}):
+	 template = get_template(template_src)
+	 html  = template.render(context_dict)
+	 result = BytesIO()
+	 pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+	 if not pdf.err:
+		 return HttpResponse(result.getvalue(), content_type='application/pdf')
+	 return None

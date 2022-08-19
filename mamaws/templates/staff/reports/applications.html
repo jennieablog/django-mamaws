@@ -1,0 +1,49 @@
+<html>
+    <body>
+        <div class="applications">
+            <div class="coloredCard">
+                <h1 class="myApplications">Performer Applications ({{ status }})</h1>
+                <p>Report generated at {{ now }}</p>
+                <hr style="width: 100%; margin-bottom:1rem;">
+                <table width="1200px">
+                        <thead style="font-size: 1rem;">
+                            <th style="width: 10%; text-align: left;">Ref No.</th>
+                            <th style="width: 20%; text-align: left;">Full Name </th>
+                            <th style="width: 15%; text-align: left;">Email</th>
+                            <th style="width: 25%; text-align: left;">Phone Number</th>
+                            <th style="width: 10%; text-align: left;">Status</th>
+                            <th style="width: 25%; text-align: left;">
+                                {% if status == 'PENDING' %}
+                                Created at:
+                                {% elif status == 'APPROVED' %}
+                                Approved at:
+                                {% elif status == 'REJECTED' %}
+                                Rejected at:
+                                {% endif %}
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for application in applications %}
+                            <tr>
+                                <td style="text-align: left;">{{ application.hash_code }}</td>
+                                <td style="text-align: left;">{{ application.full_name }}</td>
+                                <td style="text-align: left;">{{ application.email }}</td>
+                                <td style="text-align: left;">{{ application.phone_number }}</td>
+                                <td style="text-align: left;">{{ application.status }}</td>
+                                <td style="text-align: left;">
+                                    {% if status == 'PENDING' %}
+                                    {{ application.created_at }}
+                                    {% elif status == 'APPROVED' %}
+                                    {{ application.processed_at }}
+                                    {% elif status == 'REJECTED' %}
+                                    {{ application.processed_at }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %} 
+                        </tbody>
+                </table>    
+            </div>
+        </div>
+    </body>
+</html>

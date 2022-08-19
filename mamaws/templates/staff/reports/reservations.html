@@ -1,0 +1,50 @@
+<html>
+    <body>
+        <div class="reservations">
+            <div class="coloredCard">
+                <h1 class="myReservations">RESERVATIONS ({{ status }})</h1>
+                <p>Report generated at {{ now }}</p>
+                <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+        
+                <table width="1200px">
+                    <thead style="font-size: 1rem;">
+                        <th style="width: 15%; text-align: left;">Party Name</th>
+                        <th style="width: 20%; text-align: center;">Account</th>
+                        <th style="width: 20%; text-align: center;">Date and Time</th>
+                        <th style="width: 15%; text-align: center;">Total</th>
+                        <th style="width: 10%; text-align: right;">Status</th>
+                        <th style="width: 20%; text-align: right;">
+                            {% if status == 'PENDING' %}
+                            Created at:
+                            {% elif status == 'APPROVED' %}
+                            Approved at:
+                            {% elif status == 'DENIED' %}
+                            Rejected at:
+                            {% endif %}
+                        </th>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr>
+                            <td style="text-align: left;">{{ reservation.party_name }}</td>
+                            <td style="text-align: center;">{{ reservation.account }}</td>
+                            <td style="text-align: center;">{{ reservation.party_date }}</td>
+                            <td style="text-align: center;">{{ reservation.total_cost }}</td>
+                            <td style="text-align: right;">{{ reservation.status }}</td>
+                            <td style="text-align: right;">
+                                {% if status == 'PENDING' %}
+                                {{ reservation.created_at }}
+                                {% elif status == 'APPROVED' %}
+                                {{ reservation.processed_at }}
+                                {% elif status == 'DENIED' %}
+                                {{ reservation.processed_at }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

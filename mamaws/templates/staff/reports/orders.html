@@ -1,0 +1,50 @@
+<html>
+    <body>
+        <div class="orders">
+            <div class="coloredCard">
+                <h1 class="myOrders">SHOP ORDERS ({{ status }})</h1>
+                <p>Report generated at {{ now }}</p>
+                <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+        
+                <table width="1200px">
+                    <thead style="font-size: 1rem;">
+                        <th style="width: 10%; text-align: left;">Purchase ID</th>
+                        <th style="width: 20%; text-align: center;">Account:</th>
+                        <th style="width: 20%; text-align: center;">Order Created at:</th>
+                        <th style="width: 15%; text-align: center;">Total Cost</th>
+                        <th style="width: 10%; text-align: right;">Status</th>
+                        <th style="width: 20%; text-align: right;">
+                            {% if status == 'PREPARING' %}
+                            Order Approved at:
+                            {% elif status == 'SHIPPED OUT' %}
+                            Order Shipped at:
+                            {% elif status == 'DELIVERED' %}
+                            Order Delivered at:
+                            {% endif %}
+                        </th>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td style="text-align: left;">{{ order.id }}</a></td>
+                            <td style="text-align: center;">{{ order.account }}</td>
+                            <td style="text-align: center;">{{ order.created_at }}</td>
+                            <td style="text-align: center;">{{ order.total_cost }}</td>
+                            <td style="text-align: right;">{{ order.status }}</td>
+                            <td style="text-align: right;">
+                                {% if status == 'PREPARING' %}
+                                {{ order.paid_at }}
+                                {% elif status == 'SHIPPED OUT' %}
+                                {{ order.shipped_at }}
+                                {% elif status == 'DELIVERED' %}
+                                {{ order.delivered_at }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

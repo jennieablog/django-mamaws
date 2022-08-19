@@ -230,7 +230,9 @@
 
 <div class="reservations">
     <div class="coloredCard">
-        <span class="myReservations">RESERVATIONS (PENDING)</span>
+        <span class="myReservations">RESERVATIONS (PENDING)
+            <button style="margin-top: 2px;"><a href="{% url 'reservations_report' status='PENDING' %}" target="_blank">PRINT</a></button>
+        </span>
         <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
 
         <table width="1200px">
@@ -265,7 +267,9 @@
 
 <div class="reservations">
     <div class="coloredCard">
-        <span class="myReservations">RESERVATIONS (APPROVED)</span>
+        <span class="myReservations">RESERVATIONS (APPROVED)
+            <button style="margin-top: 2px;"><a href="{% url 'reservations_report' status='APPROVED' %}" target="_blank">PRINT</a></button>
+        </span>
         <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
 
         <table width="1200px">
@@ -299,7 +303,9 @@
 
 <div class="reservations">
     <div class="coloredCard">
-        <span class="myReservations">RESERVATIONS (REJECTED)</span>
+        <span class="myReservations">RESERVATIONS (DENIED)
+            <button style="margin-top: 2px;"><a href="{% url 'reservations_report' status='DENIED' %}" target="_blank">PRINT</a></button>
+        </span>
         <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
 
         <table width="1200px">

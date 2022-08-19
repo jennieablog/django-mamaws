@@ -224,7 +224,9 @@
 <!-- SHOP FOR PENDING -->
 <div class="orders">
     <div class="coloredCard">
-        <span class="myOrders">SHOP ORDERS (PENDING)</span>
+        <span class="myOrders">SHOP ORDERS (PREPARING)
+            <button style="margin-top: 2px;"><a href="{% url 'sales_report' status='PREPARING' %}" target="_blank">PRINT</a></button>
+        </span>
         <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
 
         <table width="1200px">
@@ -265,7 +267,9 @@
 <!-- SHOP FOR SHIPPED OUT -->
 <div class="orders">
     <div class="coloredCard">
-        <span class="myOrders">SHOP ORDERS (SHIPPED OUT)</span>
+        <span class="myOrders">SHOP ORDERS (SHIPPED OUT)
+            <button style="margin-top: 2px;"><a href="{% url 'sales_report' status='SHIPPED OUT' %}" target="_blank">PRINT</a></button>
+        </span>
         <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
 
         <table width="1200px">
@@ -306,7 +310,9 @@
 <!-- SHOP FOR SHIPPED OUT -->
 <div class="orders">
     <div class="coloredCard">
-        <span class="myOrders">SHOP ORDERS (DELIVERED)</span>
+        <span class="myOrders">SHOP ORDERS (DELIVERED)
+            <button style="margin-top: 2px;"><a href="{% url 'sales_report' status='DELIVERED' %}" target="_blank">PRINT</a></button>
+        </span>
         <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
 
         <table width="1200px">

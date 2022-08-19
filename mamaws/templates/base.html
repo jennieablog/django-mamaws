@@ -4,7 +4,6 @@
 
 <head>
     <meta charset="utf-8">
-    <!-- <meta property="og:image" content=""> -->
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1024">
     <meta property="og:image:height" content="1024">
@@ -14,49 +13,15 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Mamaw's Clown and Party Needs">
     <meta name="twitter:description" content="Description">
-    <!-- <meta name="twitter:image" content=""> -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Mamaw's Clown and Party Needs</title>
 
-    <!-- <link rel="shortcut icon" href="{% static 'favicon.ico' %}" %}/>
-    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-icon-57x57.png' %}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-icon-60x60.png' %}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'apple-icon-72x72.png' %}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'apple-icon-76x76.png' %}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'apple-icon-114x114.png' %}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'apple-icon-120x120.png' %}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'apple-icon-144x144.png' %}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'apple-icon-152x152.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-icon-180x180.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192"  href="{% static 'android-icon-192x192.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon-96x96.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff"> -->
-
     {% include 'style.html' %}
 </head>
 
 <body>
-    <!-- <h1>Mamaw's Clown and Party Needs</h1> -->
-    <!-- 
-    <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
-        <li><a href="{% url 'services' %}">Services</a></li>
-        <li><a href="{% url 'about' %}">About</a></li>
-        {% if user.is_authenticated %}
-        <li>Welcome, {{ user.first_name }}. <a href="{% url 'account_logout' %}">LOGOUT</a></li>
-        {% else %}
-        <li><a href="{% url 'account_signup' %}">SIGNUP</a></li>
-        <li><a href="{% url 'account_login' %}">LOGIN</a></li>
-        {% endif %}
-    </ul> -->
     <div class="header">
         <div class="infoSection">
             <div>0917-128-5250</div>
@@ -81,8 +46,8 @@
                 <div><a href="{% url 'cart' %}"><img class='cart-icon' src='https://i.ibb.co/jRtJnD8/cart.png'/> ({{ request.user.cart_size }})</a></div>
                 <div><a href="{% url 'notifications' %}"><img class='cart-icon' src='https://i.ibb.co/nzDsfCC/notificationbell-logo.png'/> ({{ request.user.notification_count }})</a></div>
                 {% else %}
-                <a href="{% url 'account_login' %}">LOG IN</a>
-                <a href="{% url 'account_signup' %}">| SIGN UP</a>
+                <a href="{% url 'account_login' %}">LOG IN</a><span style="margin: 0 10px;">|</span>
+                <a href="{% url 'account_signup' %}">SIGN UP</a>
                 {% endif %}
                 
             </div>
