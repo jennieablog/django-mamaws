@@ -8,7 +8,7 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from mamaws.apps.accounts.models import Account
 
@@ -73,6 +73,7 @@ class Reservation(models.Model):
 	total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
 	created_at = models.DateTimeField(auto_now_add=True)
+	processed_at = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
 		return self.party_name
@@ -90,6 +91,10 @@ class Reservation(models.Model):
 			total += equipment.price
 		
 		self.total_cost = total
+	
+	def process(self):
+		self.processed_at = timezone.now()
+		self.save()
 
 class MascotReservation(models.Model):
 	mascot = models.ForeignKey(Mascot, on_delete=models.CASCADE)
@@ -177,7 +182,9 @@ class Purchase(models.Model):
 
 	shipping_address = models.CharField(max_length=200, null=True, blank=True)
 	payment_method = models.CharField(max_length=15, null=True, blank=True, choices=PAYMENT_METHOD, default='COD')
+	
 	paid_at = models.DateTimeField(null=True, blank=True)
+	shipped_at = models.DateTimeField(null=True, blank=True)
 	delivered_at = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
@@ -201,6 +208,7 @@ class Purchase(models.Model):
 
 	def deliver(self):
 		self.status = 'SHIPPED OUT'
+		self.shipped_at = timezone.now()
 		self.save()
 	
 	def fulfill(self):

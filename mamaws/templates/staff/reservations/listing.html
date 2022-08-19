@@ -1,37 +1,342 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Party Reservations</h2>
-<hr>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        color: inherit;
+        text-decoration: inherit;
+        list-style: outside none none;
+        --scrollbarBG: #CFD8DC;
+        --thumbBG: #e7a9ff;
+        scrollbar-width: thin;
+        scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+    }
 
-<h3>Pending Reservations</h3>
-<ul>
-    {% for reservation in pending_reservations %}
-    <li>
-        <a href="{% url 'reservations_process' pk=reservation.id %}">Event ID: {{ reservation.id }} ({{ reservation.status }})</a> | {{ reservation.party_date }} {{ reservation.party_start_time }} - {{ reservation.party_end_time }} | Created at: {{ reservation.created_at }} | Booked by: {{ reservation.account }} | TOTAL: {{ reservation.total_cost }}
-    </li>
-    {% endfor %}
-</ul>
-<p><strong>TOTAL:</strong> {{ pending_reservations_total }}</p>
-<hr>
-<h3>Shipped Reservations</h3>
-<ul>
-    {% for reservation in approved_reservations %}
-    <li>
-        <a href="{% url 'reservations_process' pk=reservation.id %}">Event ID: {{ reservation.id }} ({{ reservation.status }})</a> | {{ reservation.party_date }} {{ reservation.party_start_time }} - {{ reservation.party_end_time }} | Created at: {{ reservation.created_at }} | Booked by: {{ reservation.account }} | TOTAL: {{ reservation.total_cost }}| APPROVED: {{ reservation.processing_date }}
-    </li>
-    {% endfor %}
-</ul>
-<p><strong>TOTAL:</strong> {{ approved_reservations_total }}</p>
-<hr>
-<h3>Delivered Reservations</h3>
-<ul>
-    {% for reservation in rejected_reservations %}
-    <li>
-        <a href="{% url 'reservations_process' pk=reservation.id %}">Event ID: {{ reservation.id }} ({{ reservation.status }})</a> | {{ reservation.party_date }} {{ reservation.party_start_time }} - {{ reservation.party_end_time }} | Created at: {{ reservation.created_at }} | Booked by: {{ reservation.account }} | TOTAL: {{ reservation.total_cost }}| REJECTED: {{ reservation.processing_date }}
-    </li>
-    {% endfor %}
-</ul>
-<p><strong>TOTAL:</strong> {{ rejected_reservations_total }}</p>
+    body {
+        background: linear-gradient(90deg, #CFECEE 13.39%, #F5B9B9 53.57%, #C3C2FB 85.51%);
+        font-family: 'Roboto Flex', sans-serif;
+    }
+
+    *::-webkit-scrollbar {
+        width: 20px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: var(--scrollbarBG);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--thumbBG);
+        border-radius: 10px;
+        border: 3px solid var(--scrollbarBG);
+    }
+
+    /* CSS STYLE FOR NAVBAR */
+    .header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .infoSection {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        font-weight: bolder;
+        font-family: 'Roboto Flex', sans-serif;
+    }
+
+    .navigation {
+        display: flex;
+        height: 7.813rem;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+        background: white;
+        padding-left: 10.5rem;
+        padding-right: 10.5rem;
+        font-weight: bolder;
+    }
+
+    .leftHeader {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .leftHeader a {
+        color: inherit;
+        text-decoration: inherit;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+
+    .logoHeader {
+        background: #ffffff;
+        border-radius: 100%;
+        height: 10rem;
+        width: 10rem;
+        padding: 1rem;
+        border: 2px solid black;
+    }
+
+    .rightHeader {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .user-icon {
+        width: 2.5rem;
+    }
+
+    /* CSS STYLE FOR FOOTER */
+    .footer {
+        height: 20rem;
+        display: flex;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 2px solid #000000;
+        justify-content: center;
+    }
+
+    .footerHeaders {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .copyright {
+        padding-left: 5rem;
+        padding-top: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .footerContent {
+        display: flex;
+        padding-left: 14rem;
+        padding-right: 14rem;
+    }
+
+    .leftFooter {
+        display: flex;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .leftFooter a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    .myAccount {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .sitemap {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .rightFooter {
+        display: flex;
+        width: 100%;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .socials {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logoFooter {
+        background: #FFFFFF;
+        border-radius: 100%;
+        height: 10rem;
+        width: 10rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .notifMessage {
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 1rem;
+        background-color: rgb(149, 255, 237);
+    }
+
+    .servicesContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 8rem;
+        margin-bottom: 8rem;
+    }
+
+/* CONTENT STYLE */
+    .reservations {
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        margin-top: 5rem;
+        margin-bottom: 6rem;
+        margin: 5rem;
+    }
+
+    .coloredCard {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.7);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 2rem;
+        padding: 2rem;
+    }
+
+    .myReservations {
+        display: flex;
+        align-self: start;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-bottom: 1rem;
+        color: rgb(109, 21, 192);
+    }
+
+    button {
+        color: white;
+        width: 6rem;
+        height: 1.5rem;
+        background-color: rgb(39, 39, 39);
+        border-radius: 0.5rem;
+        border-color: white;
+        margin-left: 1rem;
+    }
+</style>
+
+<h1 style="margin: 50px; text-align: center;">Party Reservations</h1>
+<p style="text-align: center;">Manage your events.</p>
+
+
+
+<div class="reservations">
+    <div class="coloredCard">
+        <span class="myReservations">RESERVATIONS (PENDING)
+            <button style="margin-top: 2px;"><a href="{% url 'reservations_report' status='PENDING' %}" target="_blank">PRINT</a></button>
+        </span>
+        <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+
+        <table width="1200px">
+            <thead style="font-size: 1rem;">
+                <th style="width: 15%; text-align: left;">Party Name</th>
+                <th style="width: 20%; text-align: center;">Account</th>
+                <th style="width: 20%; text-align: center;">Date and Time</th>
+                <th style="width: 15%; text-align: center;">Total</th>
+                <th style="width: 10%; text-align: right;">Status</th>
+                <th style="width: 20%; text-align: right;">Created at:</th>
+                <th style="width: 15%; text-align: right;"></th>
+            </thead>
+            <tbody>
+                {% for reservation in pending_reservations %}
+                <tr>
+                    <td style="text-align: left;"><a href="{% url 'reservations_process' pk=reservation.id %}">{{ reservation.id }}</a></td>
+                    <td style="text-align: center;">{{ reservation.party_name }}</td>
+                    <td style="text-align: center;">{{ reservation.party_date }}</td>
+                    <td style="text-align: center;">{{ reservation.total_cost }}</td>
+                    <td style="text-align: right;">{{ reservation.status }}</td>
+                    <td style="text-align: right;">{{ reservation.created_at }}</td>
+                    <td style="text-align: right;">
+                        <button><a href="{% url 'reservations_process' pk=reservation.id %}">View</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="reservations">
+    <div class="coloredCard">
+        <span class="myReservations">RESERVATIONS (APPROVED)
+            <button style="margin-top: 2px;"><a href="{% url 'reservations_report' status='APPROVED' %}" target="_blank">PRINT</a></button>
+        </span>
+        <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+
+        <table width="1200px">
+            <thead style="font-size: 1rem;">
+                <th style="width: 15%; text-align: left;">Party Name</th>
+                <th style="width: 20%; text-align: center;">Account</th>
+                <th style="width: 20%; text-align: center;">Date and Time</th>
+                <th style="width: 15%; text-align: center;">Total</th>
+                <th style="width: 10%; text-align: right;">Status</th>
+                <th style="width: 20%; text-align: right;">Approved at:</th>
+                <th style="width: 15%; text-align: right;"></th>
+            </thead>
+            <tbody>
+                {% for reservation in approved_reservations %}
+                <tr>
+                    <td style="text-align: left;"><a href="{% url 'reservations_process' pk=reservation.id %}">{{ reservation.id }}</a></td>
+                    <td style="text-align: center;">{{ reservation.party_name }}</td>
+                    <td style="text-align: center;">{{ reservation.party_date }}</td>
+                    <td style="text-align: center;">{{ reservation.total_cost }}</td>
+                    <td style="text-align: right;">{{ reservation.status }}</td>
+                    <td style="text-align: right;">{{ reservation.processed_at }}</td>
+                    <td style="text-align: right;">
+                        <button><a href="{% url 'reservations_process' pk=reservation.id %}">View</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="reservations">
+    <div class="coloredCard">
+        <span class="myReservations">RESERVATIONS (DENIED)
+            <button style="margin-top: 2px;"><a href="{% url 'reservations_report' status='DENIED' %}" target="_blank">PRINT</a></button>
+        </span>
+        <hr style="width: 100%; border: 1px solid rgb(165, 165, 165); margin-bottom:1rem;">
+
+        <table width="1200px">
+            <thead style="font-size: 1rem;">
+                <th style="width: 15%; text-align: left;">Party Name</th>
+                <th style="width: 20%; text-align: center;">Account</th>
+                <th style="width: 20%; text-align: center;">Date and Time</th>
+                <th style="width: 15%; text-align: center;">Total</th>
+                <th style="width: 10%; text-align: right;">Status</th>
+                <th style="width: 20%; text-align: right;">Rejected at:</th>
+                <th style="width: 15%; text-align: right;"></th>
+            </thead>
+            <tbody>
+                {% for reservation in rejected_reservations %}
+                <tr>
+                    <td style="text-align: left;"><a href="{% url 'reservations_process' pk=reservation.id %}">{{ reservation.id }}</a></td>
+                    <td style="text-align: center;">{{ reservation.party_name }}</td>
+                    <td style="text-align: center;">{{ reservation.party_date }}</td>
+                    <td style="text-align: center;">{{ reservation.total_cost }}</td>
+                    <td style="text-align: right;">{{ reservation.status }}</td>
+                    <td style="text-align: right;">{{ reservation.processed_at }}</td>
+                    <td style="text-align: right;">
+                        <button><a href="{% url 'reservations_process' pk=reservation.id %}">View</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 
 {% endblock %}

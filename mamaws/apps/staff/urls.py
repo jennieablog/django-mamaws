@@ -37,4 +37,13 @@ urlpatterns = [
     path('orders/', orders_listing, name='orders_listing'),
     path('orders/<int:pk>/deliver', orders_deliver, name='orders_deliver'),
     path('orders/<int:pk>/fulfill', orders_fulfill, name='orders_fulfill'),
+
+    path('perfomer_application/', performer_application, name='performer_application'),
+    path('performer_application_status/', performer_application_status, name='performer_application_status'),
+    path('performer_application_listing/', performer_application_listing, name='performer_application_listing'),
+    path('performer_application/<int:pk>/', performer_application_details, name='performer_application_details'),
+
+    path('reservations_report/<str:status>/', reservations_report, name='reservations_report'),
+    path('sales_report/<str:status>/', sales_report, name='sales_report'),
+    path('applications_report/<str:status>/', applications_report, name='applications_report'),
 ]

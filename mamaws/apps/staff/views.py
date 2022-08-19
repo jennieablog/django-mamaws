@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from mamaws.apps.accounts.models import *
 from mamaws.apps.events.models import *
@@ -18,6 +18,10 @@ from .forms import *
 from .models import *
 
 import json
+
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa  
 
 @staff_member_required
 def dashboard(request):
@@ -231,12 +235,12 @@ def products_delete(request, pk):
 @staff_member_required
 def reservations_listing(request):
 	context = {
-		"pending_reservations": Reservation.objects.filter(status='PENDING'),
-		"approved_reservations": Reservation.objects.filter(status='APPROVED'),
-		"rejected_reservations": Reservation.objects.filter(status='REJECTED'),
+		"pending_reservations": Reservation.objects.filter(status='PENDING').order_by('created_at'),
+		"approved_reservations": Reservation.objects.filter(status='APPROVED').order_by('processed_at'),
+		"rejected_reservations": Reservation.objects.filter(status='DENIED').order_by('processed_at'),
 		"pending_reservations_total": Reservation.objects.filter(status='PENDING').aggregate(total=Sum('total_cost'))['total'],
 		"approved_reservations_total": Reservation.objects.filter(status='APPROVED').aggregate(total=Sum('total_cost'))['total'],
-		"rejected_reservations_total": Reservation.objects.filter(status='REJECTED').aggregate(total=Sum('total_cost'))['total'],
+		"rejected_reservations_total": Reservation.objects.filter(status='DENIED').aggregate(total=Sum('total_cost'))['total'],
 	}
 
 	return render(request, 'staff/reservations/listing.html', context)
@@ -249,6 +253,7 @@ def reservations_process(request, pk):
 		reservation.status = request.POST['status']
 		reservation.remarks = request.POST['remarks']
 		reservation.save()
+		reservation.process()
 
 		if reservation.status == 'APPROVED':
 			message = 'Your reservation for ' + reservation.party_name + ' has been approved. Our team will get in touch with you within the next 72 hours.'
@@ -268,9 +273,9 @@ def reservations_process(request, pk):
 @staff_member_required
 def orders_listing(request):
 	context = {
-		"pending_orders": Purchase.objects.filter(status='PREPARING'),
-		"shipped_orders": Purchase.objects.filter(status='SHIPPED OUT'),
-		"fulfilled_orders": Purchase.objects.filter(status='DELIVERED'),
+		"pending_orders": Purchase.objects.filter(status='PREPARING').order_by('paid_at'),
+		"shipped_orders": Purchase.objects.filter(status='SHIPPED OUT').order_by('shipped_at'),
+		"fulfilled_orders": Purchase.objects.filter(status='DELIVERED').order_by('delivered_at'),
 		"pending_orders_total": Purchase.objects.filter(status='PREPARING').aggregate(total=Sum('total_cost'))['total'],
 		"shipped_orders_total": Purchase.objects.filter(status='SHIPPED OUT').aggregate(total=Sum('total_cost'))['total'],
 		"fulfilled_orders_total": Purchase.objects.filter(status='DELIVERED').aggregate(total=Sum('total_cost'))['total'],
@@ -300,7 +305,113 @@ def orders_fulfill(request, pk):
 	messages.success(request, _('Order with Purchase ID#' + str(order.id) +' has been delivered.'))
 	return redirect('orders_listing')
 
+def performer_application(request):
+	if request.method == 'POST':
+		form = PerformerApplicationForm(request.POST, request.FILES)
+		if form.is_valid():
+			application = form.save(commit=False)
+			application.hash_code = hash(application.full_name) % 10 ** 8
+			application.save()
+			messages.success(request, _('You have successfully submitted your application!'))
+			return render(request, 'staff/applications/form.html', { 'has_submitted' : True, 'reference_number' : application.hash_code })
+		else:
+			messages.error(request, _('There was an error:'+str(form.errors)))
+	
+	return render(request, 'staff/applications/form.html',  { 'has_submitted' : False})
+
+def performer_application_status(request):
+	if request.method == 'POST':
+		hash_code = request.POST['reference_number']
+		application = get_object_or_404(PerformerApplication, hash_code=hash_code)
+		return render(request, 'staff/applications/status.html', { 'application' : application })
+	return render(request, 'staff/applications/status.html', { 'application' : None})
+
+@staff_member_required
+def performer_application_listing(request):
+	context = {
+		"pending_applications": PerformerApplication.objects.filter(status='PENDING').order_by('created_at'),
+		"approved_applications": PerformerApplication.objects.filter(status='APPROVED').order_by('processed_at'),
+		"rejected_applications": PerformerApplication.objects.filter(status='REJECTED').order_by('processed_at'),
+	}
+
+	return render(request, 'staff/applications/listing.html', context)
+
+@staff_member_required
+def performer_application_details(request, pk):
+	application = get_object_or_404(PerformerApplication, id=pk)
+
+	if request.method == 'POST':
+		application.status = request.POST['status']
+		application.save()
+		application.process()
+
+		messages.success(request, _('Application for ' + application.full_name + ' successfully approved.'))
+		return redirect('performer_application_listing')
+
+	context = {
+		"application": application,
+	}
+
+	return render(request, 'staff/applications/details.html', context)
+
+@staff_member_required
+def reservations_report(request, status):
+	status = status.upper()
+
+	order_by_property = 'created_at'
+	if (status in ['APPROVED', 'DENIED']):
+		order_by_property = 'processed_at'
+
+	pdf = html_to_pdf('staff/reports/reservations.html', {
+		"reservations": Reservation.objects.filter(status=status).order_by(order_by_property),
+		"status": status,
+		"now": timezone.now()
+	})
+	return HttpResponse(pdf, content_type='application/pdf')
+
+@staff_member_required
+def sales_report(request, status):
+	status = status.upper()
+
+	order_by_property = {
+		'PREPARING': 'paid_at',
+		'SHIPPED OUT': 'shipped_at',
+		'DELIVERED': 'delivered_at',
+	}
+
+	pdf = html_to_pdf('staff/reports/orders.html', {
+		"orders": Purchase.objects.filter(status=status).order_by(order_by_property[status]),
+		"status": status,
+		"now": timezone.now()
+	})
+	return HttpResponse(pdf, content_type='application/pdf')
+
+@staff_member_required
+def applications_report(request, status):
+	status = status.upper()
+
+	order_by_property = 'created_at'
+	if (status in ['APPROVED', 'REJECTED']):
+		order_by_property = 'processed_at'
+
+	pdf = html_to_pdf('staff/reports/applications.html', {
+		"applications": PerformerApplication.objects.filter(status=status).order_by(order_by_property),
+		"status": status,
+		"now": timezone.now()
+	})
+	return HttpResponse(pdf, content_type='application/pdf')
+
 def send_notification(request, message, url, user):
 	notif = Notification.objects.create(account=user, message=message, url=url)
 	notif.save()
 	return
+
+# defining the function to convert an HTML file to a PDF file
+def html_to_pdf(template_src, context_dict={}):
+	 template = get_template(template_src)
+	 html  = template.render(context_dict)
+	 result = BytesIO()
+	 pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+	 if not pdf.err:
+		 return HttpResponse(result.getvalue(), content_type='application/pdf')
+	 return None

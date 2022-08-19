@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Moul&family=Roboto+Flex:opsz@8..144&display=swap');
+    
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        text-decoration: none;
+    }
+    * a{
+        color: black;
+    }
+    body{
+        background: linear-gradient(90deg, #CFECEE 13.39%, #F5B9B9 53.57%, #C3C2FB 85.51%);
+        font-family: 'Roboto Flex', sans-serif;
+    }
+    
+    
+    /* CONTENTS STYLE */
+    .appContainer{
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+        margin-bottom: 5rem;
+    }
+    .appImage{
+        background: url("https://i.ibb.co/vL9Lvc8/background-Application-IMG.png");
+        font-size: 2rem;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-repeat: no-repeat;
+        background-size:cover;
+        margin-right: 2rem;
+        padding: 13rem;
+    }
+    
+    .appForm{
+        background: white;
+        padding: 2.5rem;
+        width: 28rem;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .appForm p{
+        font-size: 1.5rem;
+    }
+    .appForm label{
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .appForm input{
+        width: 100%;
+        height: 1.5rem;
+        border: solid 1px;
+        border-radius: 5px;
+    }
+    .appForm input[class="upload"]{
+        width: 100%;
+        border:0;
+        border-radius: 2px;
+    }
+    
+    .uploadButtons{
+        text-align: center;
+        display: block;
+        width: 14rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        font-size: 1.5rem;
+        background: white;
+        height: 3rem;
+        cursor: pointer;
+        box-shadow: 0px .25rem .25rem rgba(0, 0, 0, 0.25);
+        border-radius: .625rem;
+    }
+    
+    .submitButton{
+        border-radius: 1rem;
+        width: 23rem;
+        height: 4.5rem;
+        font-size: 1.5rem;
+        text-align: center;
+        color: white;
+        background: black;
+        cursor: pointer;
+        transition: .25s;
+    }    
+    
+</style>
+
+<div class="appContainer">
+    <div class="appImage">
+        <div>Make someone happy<br>with your talents</div>
+    </div>
+    <div class="appForm">
+        <h1>STATUS CHECKER</h1><br>
+        <p>Please input your reference number below to track your application: </p><br><br>
+        <form method="POST">
+            {% csrf_token %}
+            <div style="margin: 20px 0;">
+                <label class="required" for="id_reference_number">REFERENCE NUMBER</label><br>
+                <input type="text" name="reference_number" value="{{ application.hash_code }}" maxlength="200" required="" id="id_reference_number"><br>
+            </div>
+            <button class="submitButton">Check Status</button>
+
+            {% if application is not None %}
+                {% if application.status == 'APPROVED' %}
+                <p style="padding-top: 20px;">Congratulations! Your application has been approved. Please wait for our team to contact you within 3-5 days.</p><br><br>
+                {% elif application.status == 'REJECTED' %}
+                <p style="padding-top: 20px;">STATUS: REJECTED. We regret to inform you that your application was not accepted. We wish you the best of luck with your job search. Thank you for your interest in our company.</p><br><br>
+                {% else %}
+                <p style="padding-top: 20px;">STATUS: PENDING. We are still reviewing your application.</p><br><br>
+                {% endif %}
+            {% else %}
+            
+            {% endif%}
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

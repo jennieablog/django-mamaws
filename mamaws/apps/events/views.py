@@ -8,7 +8,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from mamaws.apps.accounts.models import *
 

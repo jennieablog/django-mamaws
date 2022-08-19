@@ -59,13 +59,13 @@
 </style>
 
 <div class="content">
-    <div class="button"><button><a href="{% url 'my_reservations' %}">back</a></button></div>
+    <div class="button"><button><a href="" onclick="window.history.back()">back</a></button></div>
     <div class="summary">
         <span class="partyName">{{ reservation.party_name }} ({{reservation.status}})</span>
         <span class="partySummary">PARTY SUMMARY</span>
-        <span>{{ user.name }}</span>
-        <span>{{ user.email }}</span>
-        <span>09012345678</span>
+        <span>{{ reservation.account.name }}</span>
+        <span>{{ reservation.account.email }}</span>
+        <span>{{ reservation.phone_number }}</span>
         
         <hr style="margin-bottom: 1rem;">
     
@@ -84,7 +84,7 @@
         {% for mascot in reservation.mascots.all %}
         <div class="row">
             <span>{{ mascot.mascot.name }}</span>
-            <span>--PRICE--</span>
+            <span>{{ mascot.price }}</span>
         </div>
         {% endfor %}
     
@@ -92,7 +92,7 @@
         {% for service in reservation.services.all %}
         <div class="row">
             <span>{{ service.service.name }}</span>
-            <span>--PRICE--</span>
+            <span>{{ service.price }}</span>
         </div>
         {% endfor %}
     
@@ -100,7 +100,7 @@
         {% for equipment in reservation.equipments.all %}
         <div class="row">
             <span>{{ equipment.equipment.name }}</span>
-            <span>--PRICE--</span>
+            <span>{{ equipment.price }}</span>
         </div>
         {% endfor %}
     
@@ -108,74 +108,26 @@
         {% for performer in reservation.performers.all %}
         <div class="row">
             <span>{{ performer.performer.name }}</span>
-            <span>--PRICE--</span>
+            <span>{{ performer.price }}</span>
         </div>
         {% endfor %}
-
-        <span>Total: --PRICE--</span>
+        <hr>
+        <div class="row">
+            <span style="font-size: 20px;">TOTAL</span>
+            <span style="font-size: 20px;">{{ reservation.total_cost }}</span>
+        </div>
     
         <span><strong>Party Note:</strong></span>
-        <span>Explicabo non et sint. Fugiat sit consequatur vero odio ut pariatur sint qui. Hic sunt tempora distinctio qui quisquam porro numquam. Necessitatibus illo qui ratione similique. Laudantium sunt fuga quia aliquam sapiente molestias.</span>
+        <span>{{ reservation.notes }}</span>
+
+        <span><strong>Status:</strong></span>
+        <span>{{ reservation.status }}</span>
+
+        {% if reservation.status == 'REJECTED' %}
         <span><strong>Rejection Reason:</strong></span>
-        <span>Explicabo non et sint. Fugiat sit consequatur vero odio ut pariatur sint qui. Hic sunt tempora distinctio qui quisquam porro numquam. Necessitatibus illo qui ratione similique. Laudantium sunt fuga quia aliquam sapiente molestias.</span>
+        <span>{{ reservation.remarks }}</span>
+        {% endif %}
     </div>
 </div>
- 
-
-
-
-
-
-<!-- <h3>Summary</h3>
-<ul>
-    <li>{{ user.name }}</li>
-    <li>{{ user.email }}</li>
-    <li>Party Name: {{ reservation.party_name }}</li>
-    <li>Size: {{ reservation.party_size }}</li>
-    <li>Date: {{ reservation.party_date }}</li>
-    <li>Start time: {{ reservation.party_start_time }}</li>
-    <li>End time: {{ reservation.party_end_time }}</li>
-    <li>Mascots:
-        <ul>
-            {% for mascot in reservation.mascots.all %}
-            <li>{{ mascot.mascot.name }} | {{ mascot.price }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-
-    <br><br>
-
-    <li>SERVICES
-        <ul>
-            {% for service in reservation.services.all %}
-            <li>{{ service.service.name }} | {{ service.price }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-
-    <br><br>
-
-    <li>EQUIPMENTS
-        <ul>
-            {% for equipment in reservation.equipments.all %}
-            <li>{{ equipment.equipment.name }} | {{ equipment.price }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-
-    <br><br>
-
-    <li>PERFORMERS
-        <ul>
-            {% for performer in reservation.performers.all %}
-            <li>{{ performer.performer.name }} | {{ performer.price }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-</ul> -->
-
-<hr>
-
-<h4>TOTAL: {{ reservation.total_cost }}</h4>
 
 {% endblock %}
