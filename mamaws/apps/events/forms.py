@@ -8,6 +8,7 @@ class ReservationCreationForm(forms.ModelForm):
             'party_name',
             'party_size',
             'party_date',
+            'party_address',
             'party_start_time',
             'party_end_time',
             'phone_number',
