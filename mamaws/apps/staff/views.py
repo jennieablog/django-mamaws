@@ -286,7 +286,7 @@ def reservations_process(request, pk):
 			message = 'Your reservation for ' + reservation.party_name + ' has been rejected for the following reason/s: ' + reservation.remarks
 
 		send_notification(request, message, '/my_reservations/' + str(reservation.id), reservation.account)
-		messages.success(request, _('Reservation for ' + reservation.party_name + ' successfully approved.'))
+		messages.success(request, _('Reservation for ' + reservation.party_name + ' successfully updated.'))
 		return redirect('reservations_listing')
 
 	context = {
@@ -370,7 +370,7 @@ def performer_application_details(request, pk):
 		application.save()
 		application.process()
 
-		messages.success(request, _('Application for ' + application.full_name + ' successfully approved.'))
+		messages.success(request, _('Application for ' + application.full_name + ' successfully updated.'))
 		return redirect('performer_application_listing')
 
 	context = {
