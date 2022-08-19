@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
-
-class EventsConfig(AppConfig):
-    name = 'events'
+class EventsAppConfig(AppConfig):
+    name = 'mamaws.apps.events'
+    verbose_name = 'Events'
