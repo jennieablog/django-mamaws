@@ -1,34 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="aboutContainer">
-    <div class="aboutHeader">Admin Dashboard</div>
-    <p style="padding-bottom: 50px;">Manage your transactions, products, and services.</p>
+
+<style>
+.dashboardContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 6rem;
+    padding-bottom: 10rem ;
+}
+.coloredCard{
+    text-align: center;
+    background-color: white;
+    padding: 4rem;
+    border: 0;
+    border-radius: 2rem;
+}
+.adminHeaders{
+    font-weight: bold;
+    padding-top: 20px;
+    text-align: center;
+}
+.adminButtons{
+    background-color: white;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    box-shadow: 0px 2px 2px rgb(0 0 0 / 25%);
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+}
+</style>
 
 
-    <div style="padding-top: 20px; text-align: center;">
-        <h3>Service Management</h3>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'mascots_listing' %}">Mascots</a></button>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'services_listing' %}">Services</a></button>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'equipments_listing' %}">Equipments</a></button>
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'performers_listing' %}">Performers</a></button>
-    </div>
 
-    <div style="padding-top: 20px; text-align: center;">
-        <h3>Shop Management</h3>
-        <button style="margin: 10px; padding: 10px;"><a href="{% url 'products_listing' %}">Products</a></button>
-    </div>
-
-    <div style="padding-top: 20px; text-align: center;">
-        <h3>Party Reservations Management</h3>
-        <ul style="text-align: center; list-style: none;">
-            <button style="margin: 10px; padding: 10px;"><a href="{% url 'reservations_listing' %}">Events</a></button>
-        </ul>
-    </div>
-
-    <div style="padding-top: 20px; text-align: center;">
-        <h3>Orders Management</h3>
-        <button style="margin: 10px; padding: 10px;"><a href="{% url 'orders_listing' %}">Sales</a></button>
+<div class="dashboardContainer">
+    <div class="coloredCard">
+        <span style="font-size: 3.5rem; font-weight: bold; color: #3a2588;">Admin Dashboard</span>
+        <p style="padding-bottom: 50px;">Manage your transactions, products, and services.</p>
+    
+    
+        <div class="adminHeaders">
+            <h3>Service Management</h3>
+                <button class="adminButtons"><a href="{% url 'mascots_listing' %}">Mascots</a></button>
+                <button class="adminButtons"><a href="{% url 'services_listing' %}">Services</a></button>
+                <button class="adminButtons"><a href="{% url 'equipments_listing' %}">Equipments</a></button>
+                <button class="adminButtons"><a href="{% url 'performers_listing' %}">Performers</a></button>
+        </div>
+    
+        <div class="adminHeaders">
+            <h3>Shop Management</h3>
+            <button class="adminButtons"><a href="{% url 'products_listing' %}">Products</a></button>
+        </div>
+        
+        <br><br><hr><br><br>
+        
+        <div class="adminHeaders">
+            <h3>Party Reservations Management</h3>
+            <ul style="text-align: center; list-style: none;">
+                <button class="adminButtons"><a href="{% url 'reservations_listing' %}">Events</a></button>
+            </ul>
+        </div>
+    
+        <div class="adminHeaders">
+            <h3>Orders Management</h3>
+            <button class="adminButtons"><a href="{% url 'orders_listing' %}">Sales</a></button>
+        </div>
+        <div class="adminHeaders">
+            <h3>Applications Management</h3>
+            <button class="adminButtons"><a href="#">Performer Applications</a></button>
+        </div>
     </div>
 
     <div style="padding-top: 20px; text-align: center;">
@@ -36,4 +80,5 @@
         <button style="margin: 10px; padding: 10px;"><a href="{% url 'performer_application_listing' %}">Performer Applications</a></button>
     </div>
 </div>
+
 {% endblock %}
