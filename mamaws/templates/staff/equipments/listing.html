@@ -1,33 +1,146 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="aboutContainer">
-    <div class="aboutHeader">Equipments Management</div>
-    <p>Create, retrieve, update, or delete equipments.</p>
-    <h2 style="padding: 20px;"><button style="margin: 5px; width: 100%;"><a href="{% url 'equipments_new' %}">ADD NEW EQUIPMENT</a></button></h2>
+<style>
+.mainContainer{
+    display: flex;
+    justify-content: center;
+    padding-top: 4rem;
+    padding-bottom: 3rem;
+}
+.crudHeaders{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2rem;
+}
+.crudHeaders h{
+    font-size: 3rem;
+}
 
-    <table border="1" style="border-collapse: collapse; border-spacing: 10px; width: 80%; text-align: left;">
-        <thead>
-            <th style="padding: 10px;">NAME</th>
-            <th style="padding: 10px;">DESCRIPTION</th>
-            <th style="padding: 10px;">PRICE</th>
-            <th style="padding: 10px;"></th>
-        </thead>
-        <tbody>
+.servicesHeaderContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+.addMascot{
+    width: 10rem;
+    height: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: 0;
+}
+.servicesHeader{
+    font-size: large;
+    font-weight: bold;
+}
+.itemCatalog{
+    min-width: 72rem;
+    height: 28rem;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-around;
+    overflow: auto;
+    border-radius: 0.625rem;
+    background: rgba(255, 255, 255, 0.35);
+    padding: 3rem 3.75rem;
+    gap: 3rem;
+    margin-bottom: 5rem;
+}
+.itemCard{
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    height: 20rem;
+    background: rgba(255,255,255,0.5);
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+    border-radius: 0.313rem;
+    padding: 0.75rem 0.813rem;
+    margin-bottom: 3rem;
+}
+.itemImage{
+    display: flex;
+    height: 10rem;
+    width: 10rem;
+    background: #D9D9D9;
+    align-self: center;
+    margin-bottom: 1rem;    
+}
+.itemImage img{
+    height: 10rem;
+    width: 10rem; 
+}
+.itemDetails{
+    display: flex;
+    flex-direction: column;
+}
+.itemDetails p{
+    padding-bottom: 0.2rem;
+    max-height: 1.4rem;
+    overflow-x: hidden;
+}
+.itemDetails div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.itemName{
+    font-weight: bold;
+}
+/*.itemDescription{
+    max-height: 1.4rem;
+    overflow-x: hidden;
+} */
+.subButtons button{
+    width: 4rem;
+    height: 1.5rem;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: 0;
+    margin-top: 1rem;
+}
+</style>
+<div class="mainContainer">
+    <div class="mascotContainer">
+        <div class="crudHeaders">
+            <h>EQUIPMENTS MANAGEMENT</h>
+            <span>Create, retrieve, update, or delete equipments.</span>
+        </div>
+        <div class="servicesHeaderContainer">
+            <div style="display: flex; flex-direction: column;">
+                <span class="servicesHeader">EQUIPMENTS</span>
+                <span>Choose equipments</span>
+            </div>
+            <div>
+                <a href="{% url 'equipments_new' %}"><button class="addMascot">ADD NEW EQUIPMENT</button></a>
+            </div>
+        </div>
+        <div class="itemCatalog">
             {% for equipment in equipments %}
-            <tr style="padding: 10px;">
-                <td style="padding: 10px;">{{ equipment.name }}</td>
-                <td style="padding: 10px;">{{ equipment.description }}</td>
-                <td style="padding: 10px;">{{ equipment.price }}</td>
-                <td style="padding: 10px;">
-                    <a href="{% if equipment.picture %}{{ equipment.picture.url }}{% endif %}"><button style="margin: 5px; width: 100%;">PREVIEW</button></a>
-                    <a href="{% url 'equipments_edit' pk=equipment.id %}"><button style="margin: 5px; width: 100%;">EDIT</button></a>
-                    <a href="{% url 'equipments_delete' pk=equipment.id %}"><button style="margin: 5px; width: 100%;">REMOVE</button></a>
-                </td>
-            </tr>
+            <div class="itemCard">
+                {% if equipment.picture %}
+                <div class="itemImage"><img src="{{ equipment.picture.url }}" alt="{{ equipment.picture.url }}"></div>
+                {% endif %}
+                <div class="itemDetails">
+                    <p class="itemName">{{ equipment.name }}</p>
+                    <p class="itemDescription"> {{ equipment.description }}</p>
+                    <p>Php{{ equipment.price }}</p>
+
+                    <div class="subButtons">
+                        <a href="{% url 'equipments_edit' pk=equipment.id %}"><button>edit</button></a>
+                        <a href="{% url 'equipments_delete' pk=equipment.id %}"><button>remove</button>
+                    </div></a>
+                </div>
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
-    
+        </div>
+    </div>
 </div>
+
+
 {% endblock %}

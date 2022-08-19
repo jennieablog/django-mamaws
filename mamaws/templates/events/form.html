@@ -144,6 +144,11 @@
     display: flex;
     flex-direction: column;
 }
+.itemDetails p{
+    padding-bottom: 0.2rem;
+    max-height: 1.4rem;
+    overflow-x: hidden;
+}
 .itemDetails div{
     display: flex;
     flex-direction: row;
@@ -198,6 +203,7 @@
 }
 .performerName{
     font-size: 1.2rem;
+    font-weight: bold;
 }
 
 /* STEP 3 CARD STYLE */
@@ -288,7 +294,9 @@
 .performersList ul{
     padding-left: 2rem;
 }
-
+.itemName{
+    font-weight: bold;
+}
 </style>
 
 
@@ -307,20 +315,20 @@
                     <div class="step1">STEP 1: Party Information</div>
                     <div class="step1Content">
                         <div>
-                            <label for="id_party_name" required>Party name*:</label>
-                            <input onchange="updateSummary(this);" type="text" id="id_party_name" name="party_name">
+                            <label for="id_party_name">Party name*:</label>
+                            <input onchange="updateSummary(this);" type="text" id="id_party_name" name="party_name" required>
                             <div class="invalid-feedback">
                                 {% for error in form.party_name.errors %}{{ error }}&nbsp;{% endfor %}
                             </div>
 
-                            <label for="id_party_size" required>Party size*:</label>
-                            <input onchange="updateSummary(this);" type="number" id="id_party_size" name="party_size" min="1" max="100">
+                            <label for="id_party_size">Party size*:</label>
+                            <input onchange="updateSummary(this);" type="number" id="id_party_size" name="party_size" min="1" max="100" required>
                             <div class="invalid-feedback">
                                 {% for error in form.party_size.errors %}{{ error }}&nbsp;{% endfor %}
                             </div>
                             
-                            <label for="id_party_date" required>Party date*:</label>
-                            <input onchange="updateSummary(this);" type="date" id="id_party_date" name="party_date">
+                            <label for="id_party_date">Party date*:</label>
+                            <input onchange="updateSummary(this);" type="date" id="id_party_date" name="party_date" required>
                             <div class="invalid-feedback">
                                 {% for error in form.party_date.errors %}{{ error }}&nbsp;{% endfor %}
                             </div>
@@ -328,14 +336,14 @@
 
 
                         <div>
-                            <label for="id_party_start_time" required>Start time*:</label>
-                            <input onchange="updateSummary(this);" type="time" id="id_party_start_time" name="party_start_time">
+                            <label for="id_party_start_time">Start time*:</label>
+                            <input onchange="updateSummary(this);" type="time" id="id_party_start_time" name="party_start_time" required>
                             <div class="invalid-feedback">
                                 {% for error in form.party_start_time.errors %}{{ error }}&nbsp;{% endfor %}
                             </div>
 
-                            <label for="id_party_end_time" required>End time*:</label>
-                            <input onchange="updateSummary(this);" type="time" id="id_party_end_time" name="party_end_time">
+                            <label for="id_party_end_time">End time*:</label>
+                            <input onchange="updateSummary(this);" type="time" id="id_party_end_time" name="party_end_time" required>
                             <div class="invalid-feedback">
                                 {% for error in form.party_end_time.errors %}{{ error }}&nbsp;{% endfor %}
                             </div>    
@@ -370,10 +378,10 @@
                                 <div class="itemImage"><img src="https://via.placeholder.com/250"></div>
                                 {% endif %}
                                 <div class="itemDetails">
-                                    <p>{{ mascot.name }}</p>
+                                    <p class="itemName">{{ mascot.name }}</p>
                                     <p> {{ mascot.description }}</p>
                                     <div>
-                                        <p>{{ mascot.price }}</p>
+                                        <p>Php {{ mascot.price }}</p>
                                         <input onchange="updateListSummary(this);" class="mascot" type="checkbox" id="mascot{{forloop.counter}}" name="mascot{{forloop.counter}}" value="{{ mascot.id }}" data-name="{{ mascot.name }}">
                                     </div>
                                 </div>
@@ -398,10 +406,10 @@
                                 <div class="itemImage"><img src="https://via.placeholder.com/250"></div>
                                 {% endif %}
                                 <div class="itemDetails">
-                                    <p>{{ service.name }}</p>
+                                    <p class="itemName">{{ service.name }}</p>
                                     <p> {{ service.description }}</p>
                                     <div>
-                                        <p>{{ service.price }}</p>
+                                        <p>Php {{ service.price }}</p>
                                         <input onchange="updateListSummary(this);" class="service" type="checkbox" id="service{{forloop.counter}}" name="service{{forloop.counter}}" value="{{ service.id }}" data-name="{{ service.name }}">
                                     </div>
                                 </div>
@@ -426,10 +434,10 @@
                                     <div class="itemImage"><img src="https://via.placeholder.com/250"></div>
                                     {% endif %}
                                     <div class="itemDetails">
-                                        <p>{{ equipment.name }}</p>
-                                        <p> {{ equipment.description }}</p>
+                                        <p class="itemName">{{ equipment.name }}</p>
+                                        <p>{{ equipment.description }}</p>
                                         <div>
-                                            <p>{{ equipment.price }}</p>
+                                            <p>Php {{ equipment.price }}</p>
                                             <input onchange="updateListSummary(this);" class="equipment" type="checkbox" id="equipment{{forloop.counter}}" name="equipment{{forloop.counter}}" value="{{ equipment.id }}" data-name="{{ equipment.name }}">
                                         </div>
                                     </div>

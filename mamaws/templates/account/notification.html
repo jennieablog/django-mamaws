@@ -1,18 +1,69 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Notifications</h2>
-<hr>
+<style>
+    .container{
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        padding-top: 4rem;
+        padding-bottom: 5rem;
+    }
+    .content1{
+        display: flex;
+        width: 70rem;
+        color: #5b5aaa;
+        padding-bottom: 1rem;
+    }
+    .content2{
+        width: 70rem;
+        background-color: rgba(0, 0, 10, 0.25);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        padding: 2rem;
+        padding-bottom: 1rem;
+    }
+    .individualContainer{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        min-height: 6rem;
+        background-color: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
 
-<ul>
-    {% for notification in notifications %}
-    <li>
-        <a href="{{ notification.url }}">{{ notification.message }} | {{ notification.created_at }} </a>
-    </li>
-    {% empty %}
-    <div width="100%">
-        <p>You have no notifications</p>
+    }
+</style>
+
+<div class="container">
+    <div class="content1"><h2>NOTIFICATIONS</h2></div>
+
+    <div class="content2">
+        <ul>
+            {% for notification in notifications %}
+            <li>
+                <a href="{{ notification.url }}">
+                    <div class="individualContainer">
+                        <div style="width:80%;">
+                            {{ notification.message }}
+                        </div>
+                        <div style="width: 20%;">
+                            {{ notification.created_at }}
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% empty %}
+            <div class="individualContainer" style="justify-content:center;">
+                <p>You have no notifications</p>
+            </div>
+            {% endfor %}
+        </ul>
     </div>
-    {% endfor %}
-</ul>
+
+</div>
+
 {% endblock %}

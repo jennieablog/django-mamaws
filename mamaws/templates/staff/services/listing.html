@@ -1,33 +1,142 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="aboutContainer">
-    <div class="aboutHeader">Services Management</div>
-    <p>Create, retrieve, update, or delete services.</p>
-    <h2 style="padding: 20px;"><button style="margin: 5px; width: 100%;"><a href="{% url 'services_new' %}">ADD NEW SERVICE</a></button></h2>
-
-    <table border="1" style="border-collapse: collapse; border-spacing: 10px; width: 80%; text-align: left;">
-        <thead>
-            <th style="padding: 10px;">NAME</th>
-            <th style="padding: 10px;">DESCRIPTION</th>
-            <th style="padding: 10px;">PRICE</th>
-            <th style="padding: 10px;"></th>
-        </thead>
-        <tbody>
-            {% for service in services %}
-            <tr style="padding: 10px;">
-                <td style="padding: 10px;">{{ service.name }}</td>
-                <td style="padding: 10px;">{{ service.description }}</td>
-                <td style="padding: 10px;">{{ service.price }}</td>
-                <td style="padding: 10px;">
-                    <a href="{% if service.picture %}{{ service.picture.url }}{% endif %}"><button style="margin: 5px; width: 100%;">PREVIEW</button></a>
-                    <a href="{% url 'services_edit' pk=service.id %}"><button style="margin: 5px; width: 100%;">EDIT</button></a>
-                    <a href="{% url 'services_delete' pk=service.id %}"><button style="margin: 5px; width: 100%;">REMOVE</button></a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<style>
+    .mainContainer{
+        display: flex;
+        justify-content: center;
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+    }
+    .crudHeaders{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 2rem;
+    }
+    .crudHeaders h{
+        font-size: 3rem;
+    }
     
-</div>
+    .servicesHeaderContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 1rem;
+    }
+    .addMascot{
+        width: 10rem;
+        height: 100%;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        border: 0;
+    }
+    .servicesHeader{
+        font-size: large;
+        font-weight: bold;
+    }
+    .itemCatalog{
+        min-width: 72rem;
+        height: 28rem;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        justify-content: space-around;
+        overflow: auto;
+        border-radius: 0.625rem;
+        background: rgba(255, 255, 255, 0.35);
+        padding: 3rem 3.75rem;
+        gap: 3rem;
+        margin-bottom: 5rem;
+    }
+    .itemCard{
+        display: flex;
+        flex-direction: column;
+        width: 12rem;
+        height: 20rem;
+        background: rgba(255,255,255,0.5);
+        box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+        border-radius: 0.313rem;
+        padding: 0.75rem 0.813rem;
+        margin-bottom: 3rem;
+    }
+    .itemImage{
+        display: flex;
+        height: 10rem;
+        width: 10rem;
+        background: #D9D9D9;
+        align-self: center;
+        margin-bottom: 1rem;    
+    }
+    .itemImage img{
+        height: 10rem;
+        width: 10rem; 
+    }
+    .itemDetails{
+        display: flex;
+        flex-direction: column;
+    }
+    .itemDetails p{
+        padding-bottom: 0.2rem;
+        max-height: 1.4rem;
+        overflow-x: hidden;
+    }
+    .itemDetails div{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .itemName{
+        font-weight: bold;
+    }
+    .subButtons button{
+        width: 4rem;
+        height: 1.5rem;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        border: 0;
+        margin-top: 1rem;
+    }
+    </style>
+
+    <div class="mainContainer">
+        <div class="mascotContainer">
+            <div class="crudHeaders">
+                <h>SERVICE MANAGEMENT</h>
+                <span>Create, retrieve, update, or delete services.</span>
+            </div>
+            <div class="servicesHeaderContainer">
+                <div style="display: flex; flex-direction: column;">
+                    <span class="servicesHeader">SERVICES</span>
+                    <span>Choose services</span>
+                </div>
+                <div>
+                    <a href="{% url 'services_new' %}"><button class="addMascot">ADD NEW SERVICE</button></a>
+                </div>
+            </div>
+            <div class="itemCatalog">
+                {% for service in services %}
+                <div class="itemCard">
+                    {% if service.picture %}
+                    <div class="itemImage"><img src="{{ service.picture.url }}" alt="{{ service.picture.url }}"></div>
+                    {% endif %}
+                    <div class="itemDetails">
+                        <p class="itemName">{{ service.name }}</p>
+                        <p class="itemDescription"> {{ service.description }}</p>
+                        <p>Php{{ service.price }}</p>
+    
+                        <div class="subButtons">
+                            <a href="{% url 'services_edit' pk=service.id %}"><button>edit</button></a>
+                            <a href="{% url 'services_delete' pk=service.id %}"><button>remove</button>
+                        </div></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
