@@ -64,8 +64,13 @@ def mascots_edit(request, pk):
 @staff_member_required
 def mascots_delete(request, pk):
 	mascot = get_object_or_404(Mascot, id=pk)
-	mascot.delete()
-	messages.success(request, _('Mascot successfully removed!'))
+
+	if (MascotReservation.objects.filter(mascot=mascot).count() == 0):
+		mascot.delete()
+		messages.success(request, _('Mascot successfully removed!'))
+	else:
+		messages.error(request, _('Cannot delete Mascot used in transaction.'))
+
 	return redirect('mascots_listing')
 
 @staff_member_required
@@ -105,8 +110,13 @@ def services_edit(request, pk):
 @staff_member_required
 def services_delete(request, pk):
 	service = get_object_or_404(Service, id=pk)
-	service.delete()
-	messages.success(request, _('Service successfully removed!'))
+
+	if (ServiceReservation.objects.filter(service=service).count() == 0):
+		service.delete()
+		messages.success(request, _('Service successfully removed!'))
+	else:
+		messages.error(request, _('Cannot delete Service used in transaction.'))
+
 	return redirect('services_listing')
 
 @staff_member_required
@@ -146,8 +156,13 @@ def equipments_edit(request, pk):
 @staff_member_required
 def equipments_delete(request, pk):
 	equipment = get_object_or_404(Equipment, id=pk)
-	equipment.delete()
-	messages.success(request, _('Equipment successfully removed!'))
+	
+	if (EquipmentReservation.objects.filter(equipment=equipment).count() == 0):
+		equipment.delete()
+		messages.success(request, _('Equipment successfully removed!'))
+	else:
+		messages.error(request, _('Cannot delete Equipment used in transaction.'))
+
 	return redirect('equipments_listing')
 
 @staff_member_required
@@ -187,8 +202,13 @@ def performers_edit(request, pk):
 @staff_member_required
 def performers_delete(request, pk):
 	performer = get_object_or_404(Performer, id=pk)
-	performer.delete()
-	messages.success(request, _('Performer successfully removed!'))
+	
+	if (PerformerReservation.objects.filter(performer=performer).count() == 0):
+		performer.delete()
+		messages.success(request, _('Performer successfully removed!'))
+	else:
+		messages.error(request, _('Cannot delete Performer used in transaction.'))
+
 	return redirect('performers_listing')
 
 @staff_member_required
@@ -228,8 +248,13 @@ def products_edit(request, pk):
 @staff_member_required
 def products_delete(request, pk):
 	product = get_object_or_404(Product, id=pk)
-	product.delete()
-	messages.success(request, _('Product successfully removed!'))
+	
+	if (ProductPurchase.objects.filter(product=product).count() == 0):
+		product.delete()
+		messages.success(request, _('Product successfully removed!'))
+	else:
+		messages.error(request, _('Cannot delete Product used in transaction.'))
+
 	return redirect('products_listing')
 
 @staff_member_required
