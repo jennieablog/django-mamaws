@@ -46,10 +46,11 @@ button{
 
         <table width="1000px">
                 <thead style="font-size: 1rem;">
-                    <th style="width: 15%; text-align: left;">Purchase ID</th>
+                    <th style="width: 10%; text-align: left;">Purchase ID</th>
                     <th style="width: 25%; text-align: center;">Order Created at:</th>
-                    <th style="width: 20%; text-align: right;">Total Cost</th>
+                    <th style="width: 15%; text-align: right;">Total Cost</th>
                     <th style="width: 25%; text-align: right;">Status</th>
+                    <th style="width: 30%; text-align: right;"></th>
                     <th style="width: 15%; text-align: right;"></th>
                 </thead>
                 <tbody>
@@ -60,6 +61,18 @@ button{
                         <td style="text-align: right;">{{ order.total_cost }}</td>
                         <td style="text-align: right;">{{ order.status }}</td>
                         <td style="text-align: right;">
+                            {% if order.status == 'PREPARING'%}
+                                {{ order.created_at }}
+                            {% elif order.status == 'SHIPPED OUT' %}
+                                {{ order.shipped_at }}
+                            {% elif order.status == 'DELIVERED' %}
+                                {{ order.delivered_at }}
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <td style="text-align: right;">
+                                <button><a href="{% url 'order_details' pk=order.id %}">View</a></button>
+                            </td>
                         </td>
                     </tr>
                     {% endfor %} 

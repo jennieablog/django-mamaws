@@ -25,9 +25,14 @@ class PerformerApplication(models.Model):
 	picture = models.ImageField(upload_to='pictures/', null=True, blank=True)
 	resume = models.FileField(upload_to='resumes/', null=True, blank=True)
 	hash_code = models.CharField(max_length=8)
-	created_at = models.DateTimeField(auto_now_add=True)
 
+	created_at = models.DateTimeField(auto_now_add=True)
+	processed_at = models.DateTimeField(null=True, blank=True)
 	status = models.CharField(max_length=15, blank=False, choices=APPLICATION_STATUS, default='PENDING')
 
 	def __str__(self):
 		return self.hash_code + ' - ' + self.full_name
+	
+	def process(self):
+		self.processed_at = timezone.now()
+		self.save()

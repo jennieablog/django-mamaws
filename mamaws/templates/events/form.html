@@ -527,63 +527,6 @@
                     </div>
                 </div>
             </div>
-                <h3>Step 3: Review and Book</h3>
-    
-                <div>
-                    <label for="id_phone_number" required>Phone number*:</label>
-                    <input type="text" id="id_phone_number" name="phone_number">
-                    <div class="invalid-feedback">
-                        {% for error in form.phone_number.errors %}{{ error }}&nbsp;{% endfor %}
-                    </div>
-                </div>
-    
-                <br>
-    
-                <div>
-                    <label for="id_notes" required>Notes*:</label><br>
-                    <textarea id="id_notes" name="notes" rows="4" cols="50"></textarea>
-                    <div class="invalid-feedback">
-                        {% for error in form.notes.errors %}{{ error }}&nbsp;{% endfor %}
-                    </div>
-                </div>
-    
-                <br>
-                
-            </section>
-    
-            <section>
-                <h3>Summary</h3>
-                <ul>
-                    <li>{{ user.name }}</li>
-                    <li>{{ user.email }}</li>
-                    <li>Party Name: <span id="summary_party_name"></span></li>
-                    <li>Size: <span id="summary_party_size"></span></li>
-                    <li>Date: <span id="summary_party_date"></span></li>
-                    <li>Start time: <span id="summary_party_start_time"></span></li>
-                    <li>End time: <span id="summary_party_end_time"></span></li>
-                    <li>Mascots:
-                        <ul id="summary_mascot">
-                        </ul>
-                    </li>
-                    <li>Services:
-                        <ul id="summary_service">
-                        </ul>
-                    </li>
-                    <li>Equipments:
-                        <ul id="summary_equipment">
-                        </ul>
-                    </li>
-                    <li>Performers:
-                        <ul id="summary_performer">
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-            <button type="submit">Submit Reservation</button> -->
-        </div>
-        
-
-
     </form>
 
 

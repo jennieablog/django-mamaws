@@ -93,7 +93,7 @@
         {% if messages %}
         <div class="notifMessage">
             <ul style="list-style: none;">
-                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+                {% for message in messages %}<li>{% autoescape off %} {{ message }} {% endautoescape %}</li>{% endfor %}
             </ul>
         </div>
         {% endif %}

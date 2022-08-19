@@ -2,65 +2,156 @@
 
 {% block content %}
 
-<h1>{{ reservation.party_name }} ({{reservation.status}})</h1>
+=<style>
+    .content{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    .summary{
+        display: flex;
+        flex-direction: column;
+        width: 30rem;
+        background-color: white;
+        border-radius: 1rem;
+        padding: 3rem;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    .row{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .partyName{
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: rgb(109, 21, 192);
+        /* padding-bottom: 0.5rem; */
+    }
+    .partySummary{
+        font-weight: bold;
+    }
+    span{
+        padding-bottom: 1rem;
+    }
+    hr{
+        border: 1px solid rgb(165, 165, 165);
+    }
+    .button{
+        display: flex;
+        width: 30rem;
+        padding-bottom: 1rem;
+        align-items: flex-start;
+    }
+    button{
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+        height: 2rem;
+        width: 5rem;
+        color: black;
+        background-color: white;
+        border-radius: 0.5rem;
+        border-width: 0;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+</style>
 
-<h3>Summary</h3>
-<ul>
-    <li>{{ reservation.account.name }}</li>
-    <li>{{ reservation.account.email }}</li>
-    <li>Party Name: {{ reservation.party_name }}</li>
-    <li>Size: {{ reservation.party_size }}</li>
-    <li>Date: {{ reservation.party_date }}</span></li>
-    <li>Start time: {{ reservation.party_start_time }}</li>
-    <li>End time: {{ reservation.party_end_time }}</li>
-    <li>Mascots:
-        <ul>
-            {% for mascot in reservation.mascots.all %}
-            <li>{{ mascot.mascot.name }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Services:
-        <ul>
-            {% for service in reservation.services.all %}
-            <li>{{ service.service.name }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Equipments:
-        <ul>
-            {% for equipment in reservation.equipments.all %}
-            <li>{{ equipment.equipment.name }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Performers:
-        <ul>
-            {% for performer in reservation.performers.all %}
-            <li>{{ performer.performer.name }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-</ul>
-
-<hr>
-
-<form method="post">
-    {% csrf_token %}
-    <div>
-        <label for="id_remarks" required>Remarks:</label><br>
-        <textarea id="id_remarks" name="remarks" rows="4" cols="50"></textarea>
-    </div>
-
-    <div style="margin-bottom: 20px;">
-        <label for="id_status">Action:</label>
-        <select name="status" required="" id="id_status">
-            <option value="APPROVED">APPROVE</option>
-            <option value="REJECTED">REJECT</option>
-        </select>
-    </div>
+<div class="content">
+    <div class="button"><button><a href="#" onclick="window.history.back()">back</a></button></div>
+    <div class="summary">
+        <span class="partyName">{{ reservation.party_name }} ({{reservation.status}})</span>
+        <span class="partySummary">PARTY SUMMARY</span>
+        <span>{{ reservation.account.name }}</span>
+        <span>{{ reservation.account.email }}</span>
+        <span>{{ reservation.phone_number }}</span>
+        
+        <hr style="margin-bottom: 1rem;">
     
-    <div><button type="submit">SAVE</button></div>
-</form>
+        <div class="row">
+            <span><strong>Date: </strong>{{ reservation.party_date }}</span>
+            <span><strong>Party size: </strong>{{ reservation.party_size }}</span>
+        </div>
+
+
+        <div class="row">
+            <span><strong>Start time: </strong>{{ reservation.party_start_time }}</span>
+            <span><strong>End time: </strong>{{ reservation.party_end_time }}</span>
+        </div>
+    
+        <span><strong>Mascots:</strong></span>
+        {% for mascot in reservation.mascots.all %}
+        <div class="row">
+            <span>{{ mascot.mascot.name }}</span>
+            <span>{{ mascot.price }}</span>
+        </div>
+        {% endfor %}
+    
+        <span><strong>Services:</strong></span>
+        {% for service in reservation.services.all %}
+        <div class="row">
+            <span>{{ service.service.name }}</span>
+            <span>{{ service.price }}</span>
+        </div>
+        {% endfor %}
+    
+        <span><strong>Equipments:</strong></span>
+        {% for equipment in reservation.equipments.all %}
+        <div class="row">
+            <span>{{ equipment.equipment.name }}</span>
+            <span>{{ equipment.price }}</span>
+        </div>
+        {% endfor %}
+    
+        <span><strong>Performers:</strong></span>
+        {% for performer in reservation.performers.all %}
+        <div class="row">
+            <span>{{ performer.performer.name }}</span>
+            <span>{{ performer.price }}</span>
+        </div>
+        {% endfor %}
+        <hr>
+        <div class="row">
+            <span style="font-size: 20px;">TOTAL</span>
+            <span style="font-size: 20px;">{{ reservation.total_cost }}</span>
+        </div>
+    
+        <span><strong>Party Note:</strong></span>
+        <span>{{ reservation.notes }}</span>
+
+        <span><strong>Status:</strong></span>
+        <span>{{ reservation.status }}</span>
+
+        {% if reservation.status == 'REJECTED' %}
+        <span><strong>Rejection Reason:</strong></span>
+        <span>{{ reservation.remarks }}</span>
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="content" style="margin-bottom: 30px;">
+    <div class="summary">
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin: 10px 0;">
+                <label for="id_status">Action:</label>
+                <select name="status" required="" id="id_status">
+                    <option value="APPROVED" {% if reservation.status == 'APPROVED' %}selected="selected"{% endif %}>APPROVE</option>
+                    <option value="DENIED" {% if reservation.status == 'DENIED' %}selected="selected"{% endif %}>DENY</option>
+                    <option value="PENDING" {% if reservation.status == 'PENDING' %}selected="selected"{% endif %}>PENDING</option>
+                </select>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <label for="id_remarks" required>Remarks:</label><br>
+                <textarea id="id_remarks" name="remarks" rows="4" cols="50">{{ reservation.remarks }}</textarea>
+            </div>            
+            <div><button type="submit">SAVE</button></div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
