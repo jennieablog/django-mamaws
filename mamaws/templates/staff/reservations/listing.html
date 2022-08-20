@@ -248,8 +248,8 @@
             <tbody>
                 {% for reservation in pending_reservations %}
                 <tr>
-                    <td style="text-align: left;"><a href="{% url 'reservations_process' pk=reservation.id %}">{{ reservation.id }}</a></td>
-                    <td style="text-align: center;">{{ reservation.party_name }}</td>
+                    <td style="text-align: left;">{{ reservation.party_name }}</td>
+                    <td style="text-align: center;">{{ reservation.account }}</td>
                     <td style="text-align: center;">{{ reservation.party_date }}</td>
                     <td style="text-align: center;">{{ reservation.total_cost }}</td>
                     <td style="text-align: right;">{{ reservation.status }}</td>
@@ -285,8 +285,8 @@
             <tbody>
                 {% for reservation in approved_reservations %}
                 <tr>
-                    <td style="text-align: left;"><a href="{% url 'reservations_process' pk=reservation.id %}">{{ reservation.id }}</a></td>
-                    <td style="text-align: center;">{{ reservation.party_name }}</td>
+                    <td style="text-align: left;">{{ reservation.party_name }}</td>
+                    <td style="text-align: center;">{{ reservation.account }}</td>
                     <td style="text-align: center;">{{ reservation.party_date }}</td>
                     <td style="text-align: center;">{{ reservation.total_cost }}</td>
                     <td style="text-align: right;">{{ reservation.status }}</td>
@@ -321,8 +321,8 @@
             <tbody>
                 {% for reservation in rejected_reservations %}
                 <tr>
-                    <td style="text-align: left;"><a href="{% url 'reservations_process' pk=reservation.id %}">{{ reservation.id }}</a></td>
-                    <td style="text-align: center;">{{ reservation.party_name }}</td>
+                    <td style="text-align: left;">{{ reservation.party_name }}</td>
+                    <td style="text-align: center;">{{ reservation.account }}</td>
                     <td style="text-align: center;">{{ reservation.party_date }}</td>
                     <td style="text-align: center;">{{ reservation.total_cost }}</td>
                     <td style="text-align: right;">{{ reservation.status }}</td>
